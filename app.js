@@ -725,6 +725,24 @@
     const sectionsPctFormatted = percent.format(sectionsPctNum) + "%";
     const sectionsWidth = (snapshot.sectionsTotal ? Math.min(100, sectionsPctNum) : 0) + "%";
 
+    if ($("counted-highlight-pct")) {
+      $("counted-highlight-pct").textContent = sectionsPctFormatted;
+    }
+    if ($("counted-highlight-scope")) {
+      $("counted-highlight-scope").textContent = currentScopeLabel();
+    }
+    if ($("counted-highlight-meter")) {
+      $("counted-highlight-meter").style.width = sectionsWidth;
+    }
+    if ($("counted-highlight-detail")) {
+      const totalVotesCounted = Number.isFinite(snapshot.turnout) && snapshot.turnout > 0
+        ? snapshot.turnout
+        : snapshot.validVotes;
+      $("counted-highlight-detail").textContent =
+        integer.format(totalVotesCounted) + " votos contabilizados · " +
+        integer.format(snapshot.sectionsDone) + " de " + integer.format(snapshot.sectionsTotal) + " seções totalizadas";
+    }
+
     if ($("chart-sections-summary")) {
       $("chart-sections-summary").textContent = sectionsPctFormatted + " apurado (" +
         integer.format(snapshot.sectionsDone) + " de " + integer.format(snapshot.sectionsTotal) + " seções)";

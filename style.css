@@ -343,7 +343,7 @@ a { color: inherit; }
 .election-stage {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(370px, 0.8fr);
-  align-items: start;
+  align-items: stretch;
   gap: 24px;
 }
 
@@ -994,6 +994,70 @@ a { color: inherit; }
 .swatch-neutral { background: var(--map-neutral); border: 1px solid var(--line-strong); }
 .swatch-selected { background: var(--map-neutral); border: 2px solid var(--gold); }
 
+/* Destaque de Percentual Total de Votos Apurados (abaixo do Mapa do Brasil) */
+.counted-highlight-card {
+  flex: 1 1 auto;
+  padding: 18px 20px 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(22, 26, 35, 0.96) 0%, rgba(15, 18, 25, 0.98) 100%);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.32);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.counted-highlight-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.counted-highlight-scope {
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface-alt);
+  color: var(--ink-soft);
+  font: 600 10.5px/1.2 var(--sans);
+}
+
+.counted-highlight-main {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin: 2px 0;
+}
+
+.counted-highlight-value {
+  color: var(--gold);
+  font: 800 clamp(38px, 4.1vw, 52px)/.94 var(--sans);
+  letter-spacing: -.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.counted-highlight-label {
+  color: #ffffff;
+  font: 700 clamp(18px, 1.9vw, 23px)/1.12 var(--display);
+  letter-spacing: -.015em;
+}
+
+.counted-highlight-meter {
+  height: 7px;
+  margin-top: 2px;
+  border-radius: 999px;
+}
+
+.counted-highlight-foot {
+  margin: 0;
+  color: var(--ink-soft);
+  font: 500 11.5px/1.35 var(--sans);
+  font-variant-numeric: tabular-nums;
+}
+
 /* Garantia Matemática */
 .math-banner { margin-top: 18px; padding: 17px 19px; display: flex; align-items: center; gap: 13px; border: 1px solid var(--positive); border-radius: 8px; background: rgba(40, 180, 99, 0.12); }
 .math-banner.is-final { border-color: var(--gold); background: rgba(228, 193, 102, 0.12); }
@@ -1187,6 +1251,10 @@ button:focus-visible, a:focus-visible, select:focus-visible { outline: 2px solid
   .map-info-main strong { font-size: 12px; }
   .map-info-main span { font-size: 10.5px; }
   .map-legend { gap: 8px 12px; font-size: 10px; justify-content: flex-start; }
+  .counted-highlight-card { padding: 14px; border-radius: 12px; gap: 8px; }
+  .counted-highlight-value { font-size: clamp(32px, 8.8vw, 42px); }
+  .counted-highlight-label { font-size: 16.5px; }
+  .counted-highlight-foot { font-size: 10.5px; }
   .tally-grid { margin-top: 16px; grid-template-columns: 1fr 1fr; gap: 8px; }
   .tally-item { min-height: 96px; padding: 12px; }
   .tally-item:first-child { grid-column: 1 / -1; }

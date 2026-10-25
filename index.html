@@ -25,8 +25,8 @@
   <link rel="preconnect" href="https://resultados.tse.jus.br" crossorigin>
   <link rel="preload" href="assets/fonts/PlayfairDisplay-var.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/DMSans-var.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="style.css?v=21">
-  <script src="app.js?v=18" defer></script>
+  <link rel="stylesheet" href="style.css?v=22">
+  <script src="app.js?v=19" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#conteudo">Ir para o placar</a>
@@ -321,6 +321,21 @@
               <span class="map-legend-item"><i class="swatch-neutral"></i> Neutro / Sem votos</span>
               <span class="map-legend-item"><i class="swatch-selected"></i> UF selecionada</span>
             </div>
+          </div>
+
+          <div class="counted-highlight-card" id="counted-highlight-card" aria-live="polite">
+            <div class="counted-highlight-head">
+              <span class="comparison-label">TOTALIZAÇÃO EM TEMPO REAL · TSE</span>
+              <span class="counted-highlight-scope" id="counted-highlight-scope">Brasil</span>
+            </div>
+            <div class="counted-highlight-main">
+              <strong class="counted-highlight-value" id="counted-highlight-pct">0,00%</strong>
+              <span class="counted-highlight-label">total de votos apurados</span>
+            </div>
+            <div class="section-meter counted-highlight-meter" aria-hidden="true">
+              <span id="counted-highlight-meter"></span>
+            </div>
+            <p class="counted-highlight-foot" id="counted-highlight-detail">0 votos contabilizados · 0 de — seções totalizadas</p>
           </div>
         </aside>
       </div>
