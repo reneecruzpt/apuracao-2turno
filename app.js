@@ -317,6 +317,16 @@
     return {
       idg: String(data.idg),
       generated: parseGeneration(data.dg, data.hg),
+      bulletinAt: parseGeneration(data.dt, data.ht) || parseGeneration(data.dg, data.hg),
+      bulletinSignature: [
+        String(data.idg || ""),
+        String(data.dg || ""), String(data.hg || ""),
+        String(data.dt || ""), String(data.ht || ""),
+        String(data.s?.st ?? ""), String(data.s?.ts ?? ""),
+        String(data.v?.vv ?? ""),
+        String(lula.votes), String(flavio.votes),
+        String(data.and || "").toLowerCase()
+      ].join("|"),
       checkedAt: new Date().toISOString(),
       votes: { "13": lula.votes, "22": flavio.votes },
       shares: {
@@ -366,13 +376,16 @@
 
   function recordSnapshot(snapshot, sharedPrevious = null) {
     const old = readHistory();
-    const sameBulletin = old.current && old.current.idg === snapshot.idg &&
+    const sameSnapshot = old.current && old.current.idg === snapshot.idg &&
       old.current.generated === snapshot.generated &&
       old.current.votes?.["13"] === snapshot.votes?.["13"] &&
       old.current.votes?.["22"] === snapshot.votes?.["22"] &&
       old.current.validVotes === snapshot.validVotes &&
       old.current.sectionsDone === snapshot.sectionsDone &&
       old.current.sectionsTotal === snapshot.sectionsTotal;
+    const sameBulletin = sameSnapshot &&
+      (!old.current.bulletinSignature || !snapshot.bulletinSignature ||
+        old.current.bulletinSignature === snapshot.bulletinSignature);
     if (sameBulletin) {
       const preserved = { current: snapshot, previous: sharedPrevious || old.previous };
       inMemoryHistory.set(scopeKey(), preserved);
@@ -932,10 +945,22 @@
     const k = timelineStorageKey(target);
     const current = getScopeTimeline(target);
     const byKey = new Map();
-    for (const pt of [...current, ...serverList]) {
+    const identityOf = pt => [pt.idg || "", pt.sectionsDone ?? 0, pt.votes13 ?? 0, pt.votes22 ?? 0].join("|");
+    for (const pt of current) {
       if (!pt || typeof pt !== "object") continue;
-      const sig = String(pt.idg || "") + "|" + String(pt.sectionsDone ?? 0) + "|" + String(pt.votes13 ?? 0) + "|" + String(pt.votes22 ?? 0);
-      byKey.set(sig, pt);
+      const key = pt.signature ? "bulletin:" + pt.signature : "legacy:" + identityOf(pt);
+      byKey.set(key, pt);
+    }
+    for (const pt of serverList) {
+      if (!pt || typeof pt !== "object") continue;
+      const identity = identityOf(pt);
+      if (pt.signature) {
+        // Substitui o registo antigo do navegador pela hora oficial mais precisa do servidor.
+        byKey.delete("legacy:" + identity);
+        byKey.set("bulletin:" + pt.signature, pt);
+      } else {
+        byKey.set("legacy:" + identity, pt);
+      }
     }
     const merged = Array.from(byKey.values()).sort((a, b) => {
       const ta = Date.parse(a.at || a.checkedAt || "") || 0;
@@ -952,7 +977,8 @@
     const list = getScopeTimeline(target);
     const pt = {
       idg: String(snapshot.idg || ""),
-      at: snapshot.generated || snapshot.checkedAt || new Date().toISOString(),
+      at: snapshot.bulletinAt || snapshot.generated || snapshot.checkedAt || new Date().toISOString(),
+      signature: snapshot.bulletinSignature || "",
       checkedAt: snapshot.checkedAt || new Date().toISOString(),
       votes13: snapshot.votes["13"] || 0,
       votes22: snapshot.votes["22"] || 0,
@@ -965,8 +991,12 @@
       final: Boolean(snapshot.final)
     };
     const last = list[list.length - 1];
-    if (last && last.idg === pt.idg && last.votes13 === pt.votes13 &&
-        last.votes22 === pt.votes22 && last.sectionsDone === pt.sectionsDone) {
+    const sameBulletin = last && last.signature && pt.signature
+      ? last.signature === pt.signature
+      : last && last.idg === pt.idg && last.at === pt.at &&
+        last.votes13 === pt.votes13 && last.votes22 === pt.votes22 &&
+        last.sectionsDone === pt.sectionsDone;
+    if (sameBulletin) {
       return;
     }
     list.push(pt);
@@ -1032,7 +1062,7 @@
     const withVotes = rawList
       .filter(pt => (pt.validVotes > 0) || (pt.votes13 + pt.votes22 > 0))
       .map(pt => {
-        const parsedMs = Date.parse(pt.checkedAt || pt.at || "") || TALLY_START_MS;
+        const parsedMs = Date.parse(pt.at || pt.checkedAt || "") || TALLY_START_MS;
         const ms = Math.max(TALLY_START_MS, parsedMs);
         return { ...pt, ms };
       })
@@ -1047,17 +1077,8 @@
       };
     }
 
-    // Se houver apenas 1 leitura com votos, ancora o início em 17h00 BRT para traçar o segmento horizontal inicial
-    let points = withVotes;
-    if (points.length === 1) {
-      const first = points[0];
-      const anchorMs = Math.min(first.ms, TALLY_START_MS);
-      const secondMs = Math.max(first.ms, anchorMs + 5 * 60 * 1000);
-      points = [
-        { ...first, ms: anchorMs },
-        { ...first, ms: secondMs }
-      ];
-    }
+    // Cada ponto corresponde a um boletim oficial real, posicionado pela hora informada pelo TSE.
+    const points = withVotes;
 
     const lastMs = points[points.length - 1].ms;
     const endMs = Math.max(TALLY_START_MS + TALLY_MIN_WINDOW_MS, lastMs + 15 * 60 * 1000);
@@ -1174,6 +1195,26 @@
       return;
     }
 
+    if (points.length === 1) {
+      const point = points[0];
+      const cx = xOf(point.ms).toFixed(1);
+      const cy13 = yOf(point.share13).toFixed(1);
+      const cy22 = yOf(point.share22).toFixed(1);
+      parts.push(
+        `<line x1="${cx}" y1="${padTop}" x2="${cx}" y2="${padTop + plotH}" stroke="rgba(232,184,75,0.28)" stroke-width="1" stroke-dasharray="3 4"/>`,
+        `<circle cx="${cx}" cy="${cy22}" r="${isExpanded ? "4.5" : "3.2"}" fill="#22a858" stroke="#0b0e14" stroke-width="1.4"/>`,
+        `<circle cx="${cx}" cy="${cy13}" r="${isExpanded ? "4.5" : "3.2"}" fill="#e03e3e" stroke="#0b0e14" stroke-width="1.4"/>`
+      );
+      if (isExpanded) {
+        parts.push(
+          `<text x="${padLeft + plotW / 2}" y="${padTop + 14}" text-anchor="middle" fill="#9ea6b8" font-family="DM Sans, sans-serif" font-size="11" font-weight="600">Uma parcial oficial · a curva começa com a próxima atualização</text>`,
+          `<line id="tl-hover-cursor" x1="0" y1="${padTop}" x2="0" y2="${padTop + plotH}" stroke="rgba(232,184,75,0.75)" stroke-width="1.5" stroke-dasharray="3 3" visibility="hidden"/>`
+        );
+      }
+      svgEl.innerHTML = parts.join("");
+      return;
+    }
+
     // Constrói polilinhas horizontais crescentes para Lula (13) e Flávio (22)
     const coords13 = points.map(p => ({ x: xOf(p.ms), y: yOf(p.share13), p }));
     const coords22 = points.map(p => ({ x: xOf(p.ms), y: yOf(p.share22), p }));
@@ -1286,8 +1327,11 @@
       const markerLabel = timelineMarkerMins === 0 ? "cada parcial TSE" : ("a cada " + timelineMarkerMins + " min");
       view.timelineMiniStatus.textContent = waiting
         ? "Linha do tempo: abertura às 17h00 (Horário de Brasília) · marcadores " + markerLabel
-        : (isTimelineDemo ? "Prévia visual ativa (17h00 → 20h45 BRT) · " : "Apuração em curso · ") +
-          points.length + " leituras no gráfico · marcadores " + markerLabel;
+        : isTimelineDemo
+          ? "Prévia visual ativa (17h00 → 20h45 BRT) · " + points.length + " pontos · marcadores " + markerLabel
+          : points.length === 1
+            ? "1 parcial oficial · aguardando novo boletim para formar a curva"
+            : "Apuração em curso · " + points.length + " boletins no gráfico · marcadores " + markerLabel;
     }
 
     // Atualiza painel lateral da janela modal expandida
@@ -1329,8 +1373,10 @@
             items.push(`<li><span>${formatBrtClock(curr.ms)}</span> <strong>Virada: ${front} assume a liderança</strong></li>`);
           }
         }
-        const last = points[points.length - 1];
-        items.push(`<li><span>${formatBrtClock(last.ms)}</span> <strong>Última leitura (${percent.format(last.sectionsPct)}% apurado)</strong></li>`);
+        if (points.length > 1) {
+          const last = points[points.length - 1];
+          items.push(`<li><span>${formatBrtClock(last.ms)}</span> <strong>Último boletim oficial (${percent.format(last.sectionsPct)}% apurado)</strong></li>`);
+        }
       } else {
         items.push(`<li><span>Aguardando</span> <strong>Primeira parcial com votos válidos</strong></li>`);
       }

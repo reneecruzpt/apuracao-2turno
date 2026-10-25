@@ -209,6 +209,7 @@ function extractTimelinePoint(raw, checkedAt = null) {
     return {
       idg: String(raw.idg || ""),
       at: officialTime,
+      signature: computeBulletinSignature(raw),
       checkedAt: checkedAt || officialTime,
       votes13,
       votes22,
@@ -228,10 +229,17 @@ function extractTimelinePoint(raw, checkedAt = null) {
 function appendTimelinePoint(existingList, point) {
   const list = Array.isArray(existingList) ? [...existingList] : [];
   const last = list[list.length - 1];
-  if (last && last.idg === point.idg && last.votes13 === point.votes13 &&
-      last.votes22 === point.votes22 && last.sectionsDone === point.sectionsDone) {
+  const sameIdentity = last && last.idg === point.idg && last.votes13 === point.votes13 &&
+    last.votes22 === point.votes22 && last.sectionsDone === point.sectionsDone;
+  if (last?.signature && point.signature && last.signature === point.signature) {
     return list;
   }
+  if (!last?.signature && sameIdentity) {
+    // Atualiza o ponto legado com a assinatura/hora oficial precisa sem criar duplicata.
+    list[list.length - 1] = point;
+    return list;
+  }
+  if (!last?.signature && !point.signature && sameIdentity && last.at === point.at) return list;
   list.push(point);
   return list.slice(-720);
 }
