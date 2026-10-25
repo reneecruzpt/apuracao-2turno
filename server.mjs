@@ -170,6 +170,20 @@ function generatedAt(data) {
   return parseBrTimestamp(data?.dg, data?.hg) || parseBrTimestamp(data?.dt, data?.ht);
 }
 
+function computeBulletinSignature(data) {
+  if (!data || typeof data !== "object") return "";
+  const totals = candidateTotals(data);
+  return [
+    String(data.idg || ""),
+    String(data.dg || ""), String(data.hg || ""),
+    String(data.dt || ""), String(data.ht || ""),
+    String(data.s?.st ?? ""), String(data.s?.ts ?? ""),
+    String(data.v?.vv ?? ""),
+    String(totals.get("13") ?? ""), String(totals.get("22") ?? ""),
+    String(data.and || "").toLowerCase()
+  ].join("|");
+}
+
 function computeEa20Signature(data) {
   if (!data || typeof data !== "object") return "";
   const dt = String(data.dt || data.dg || "").trim();
@@ -859,7 +873,10 @@ async function fetchEa20ForScope(uf, municipalityCode = "") {
     const raw = verifyJws(response.text);
     const validated = validateResult(raw, uf, municipalityCode);
     const saved = history[key]?.current || stored?.raw || null;
-    if (saved?.idg !== validated.idg && saved?.dg && generatedAt(raw) && generatedAt(saved) &&
+    const currentBulletinSignature = computeBulletinSignature(raw);
+    const savedBulletinSignature = saved ? computeBulletinSignature(saved) : "";
+    const isNewBulletin = !saved || currentBulletinSignature !== savedBulletinSignature;
+    if (isNewBulletin && saved && generatedAt(raw) && generatedAt(saved) &&
         new Date(generatedAt(raw)) < new Date(generatedAt(saved))) {
       const error = new Error("A CDN respondeu com uma versão anterior do EA20; a última versão válida foi mantida.");
       error.status = 409;
@@ -873,17 +890,18 @@ async function fetchEa20ForScope(uf, municipalityCode = "") {
       _uf: uf,
       ...(municipalityCode ? { _municipalityCode: municipalityCode } : {})
     };
-    const isNewIdg = !saved || saved.idg !== validated.idg;
     const existingTimeline = Array.isArray(history[key]?.timeline) ? history[key].timeline : [];
     const point = extractTimelinePoint(storedRaw, response.checkedAt);
     const updatedTimeline = point ? appendTimelinePoint(existingTimeline, point) : existingTimeline;
 
-    if (isNewIdg || updatedTimeline.length !== existingTimeline.length) {
+    if (isNewBulletin || updatedTimeline.length !== existingTimeline.length) {
       history[key] = {
         current: storedRaw,
-        previous: isNewIdg ? (saved || history[key]?.previous || null) : (history[key]?.previous || null),
+        previous: isNewBulletin ? (saved || history[key]?.previous || null) : (history[key]?.previous || null),
         checkedAt: response.checkedAt,
-        bulletinReceivedAt: generatedAt(storedRaw) || response.checkedAt,
+        bulletinReceivedAt: isNewBulletin
+          ? (saved ? response.checkedAt : (generatedAt(storedRaw) || response.checkedAt))
+          : (history[key]?.bulletinReceivedAt || generatedAt(storedRaw) || response.checkedAt),
         timeline: updatedTimeline
       };
       persistHistory();
@@ -898,7 +916,7 @@ async function fetchEa20ForScope(uf, municipalityCode = "") {
     };
     cache.set(key, record);
     recordSuccessDiagnostic(key, 200);
-    return { record, updated: isNewIdg, status: 200 };
+    return { record, updated: isNewBulletin, status: 200 };
   } catch (error) {
     recordFailure(key, error);
     throw error;
@@ -1064,7 +1082,7 @@ async function getResultForClient(uf, municipalityCode = "") {
         previous,
         timeline: Array.isArray(history[key]?.timeline) ? history[key].timeline : [],
         checkedAt: stored?.checkedAt || history[key]?.checkedAt || new Date().toISOString(),
-        lastBulletinReceivedAt: generatedAt(history[key]?.current) || history[key]?.bulletinReceivedAt || history[key]?.checkedAt || null,
+        lastBulletinReceivedAt: history[key]?.bulletinReceivedAt || generatedAt(snapshot) || history[key]?.checkedAt || null,
         stale: hasActiveFailure,
         error: hasActiveFailure ? meta.lastError : "",
         upstreamStatus: meta.upstreamStatus,
@@ -1179,6 +1197,7 @@ const server = http.createServer(async (request, response) => {
         items.push({
           uf,
           name,
+          hasSnapshot: false,
           leader: "neutral",
           votes13: 0,
           votes22: 0,
@@ -1206,6 +1225,7 @@ const server = http.createServer(async (request, response) => {
         items.push({
           uf,
           name,
+          hasSnapshot: true,
           leader,
           votes13,
           votes22,
@@ -1219,6 +1239,7 @@ const server = http.createServer(async (request, response) => {
         items.push({
           uf,
           name,
+          hasSnapshot: false,
           leader: "neutral",
           votes13: 0,
           votes22: 0,
@@ -1331,3 +1352,4 @@ server.listen(PORT, HOST, () => {
 for (const signal of ["SIGINT", "SIGTERM"]) {
   process.on(signal, () => server.close(() => process.exit(0)));
 }
+

@@ -112,6 +112,7 @@
   let activeController = null;
   const inMemoryHistory = new Map();
   const HISTORY_PREFIX = "apuração-2026-6258-";
+  const MAP_CACHE_KEY = HISTORY_PREFIX + "map-summary-v1";
   const TALLY_START_BRT_ISO = "2026-10-25T17:00:00-03:00";
   const TALLY_START_MS = Date.parse(TALLY_START_BRT_ISO);
   const TALLY_MIN_WINDOW_MS = 4 * 60 * 60 * 1000; // Janela mínima 17h00 -> 21h00 BRT
@@ -120,6 +121,60 @@
     get(key) { try { return localStorage.getItem(key); } catch { return null; } },
     set(key, value) { try { localStorage.setItem(key, value); return true; } catch { return false; } }
   };
+
+  function normalizeMapSummary(item, fromCache = false) {
+    const uf = String(item?.uf || "").toLowerCase();
+    if (!UF_NAMES[uf]) return null;
+    const readCount = value => {
+      const number = finiteNumber(value);
+      return number !== null && Number.isInteger(number) && number >= 0 ? number : null;
+    };
+    const votes13 = readCount(item.votes13);
+    const votes22 = readCount(item.votes22);
+    const validVotes = readCount(item.validVotes);
+    const sectionsDone = readCount(item.sectionsDone);
+    const sectionsTotal = readCount(item.sectionsTotal);
+    if ([votes13, votes22, validVotes, sectionsDone, sectionsTotal].some(value => value === null)) return null;
+    if (sectionsDone > sectionsTotal || votes13 + votes22 > validVotes) return null;
+    const hasSnapshot = fromCache || item.hasSnapshot === true;
+    const leader = hasSnapshot
+      ? (validVotes === 0 || (votes13 === 0 && votes22 === 0)
+        ? "neutral"
+        : (votes13 > votes22 ? "13" : (votes22 > votes13 ? "22" : "tie")))
+      : "neutral";
+    return {
+      uf,
+      name: UF_NAMES[uf],
+      leader,
+      votes13,
+      votes22,
+      validVotes,
+      sectionsDone,
+      sectionsTotal,
+      hasSnapshot
+    };
+  }
+
+  function restoreMapSummary() {
+    try {
+      const saved = storage.get(MAP_CACHE_KEY);
+      const parsed = saved ? JSON.parse(saved) : null;
+      if (parsed?.version !== 1 || !Array.isArray(parsed.items)) return;
+      for (const item of parsed.items) {
+        const normalized = normalizeMapSummary(item, true);
+        if (normalized) stateStatusMap.set(normalized.uf, normalized);
+      }
+    } catch {
+      // Cache inválido não impede a leitura do mapa nem dos dados do servidor.
+    }
+  }
+
+  function persistMapSummary() {
+    const items = [...stateStatusMap.values()].filter(item => item?.hasSnapshot === true);
+    storage.set(MAP_CACHE_KEY, JSON.stringify({ version: 1, items }));
+  }
+
+  restoreMapSummary();
 
   function finiteNumber(value) {
     if (value === null || value === undefined || value === "") return null;
@@ -311,7 +366,14 @@
 
   function recordSnapshot(snapshot, sharedPrevious = null) {
     const old = readHistory();
-    if (old.current?.idg === snapshot.idg) {
+    const sameBulletin = old.current && old.current.idg === snapshot.idg &&
+      old.current.generated === snapshot.generated &&
+      old.current.votes?.["13"] === snapshot.votes?.["13"] &&
+      old.current.votes?.["22"] === snapshot.votes?.["22"] &&
+      old.current.validVotes === snapshot.validVotes &&
+      old.current.sectionsDone === snapshot.sectionsDone &&
+      old.current.sectionsTotal === snapshot.sectionsTotal;
+    if (sameBulletin) {
       const preserved = { current: snapshot, previous: sharedPrevious || old.previous };
       inMemoryHistory.set(scopeKey(), preserved);
       return preserved;
@@ -499,10 +561,15 @@
       const payload = await response.json().catch(() => null);
       if (isPaused || !Array.isArray(payload?.items)) return;
       for (const item of payload.items) {
-        if (item && item.uf) {
-          stateStatusMap.set(item.uf, item);
-        }
+        const normalized = normalizeMapSummary(item);
+        if (!normalized) continue;
+        const previous = stateStatusMap.get(normalized.uf);
+        // Sem EA20 válido, o servidor pode enviar apenas o estado neutro do EA14.
+        // Preserve a última cor apurada em vez de apagar um resultado válido.
+        if (!normalized.hasSnapshot && previous?.hasSnapshot) continue;
+        stateStatusMap.set(normalized.uf, normalized);
       }
+      persistMapSummary();
       applyMapVisualState();
     } catch {
       // Silencioso; o mapa preserva o estado atual.
@@ -646,8 +713,10 @@
         votes22: snapshot.votes["22"],
         validVotes: snapshot.validVotes,
         sectionsDone: snapshot.sectionsDone,
-        sectionsTotal: snapshot.sectionsTotal
+        sectionsTotal: snapshot.sectionsTotal,
+        hasSnapshot: true
       });
+      persistMapSummary();
       applyMapVisualState();
     }
 
@@ -1756,3 +1825,4 @@
   }
   refresh();
 })();
+
