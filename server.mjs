@@ -883,7 +883,7 @@ async function fetchEa20ForScope(uf, municipalityCode = "") {
         current: storedRaw,
         previous: isNewIdg ? (saved || history[key]?.previous || null) : (history[key]?.previous || null),
         checkedAt: response.checkedAt,
-        bulletinReceivedAt: response.checkedAt,
+        bulletinReceivedAt: generatedAt(storedRaw) || response.checkedAt,
         timeline: updatedTimeline
       };
       persistHistory();
@@ -1064,7 +1064,7 @@ async function getResultForClient(uf, municipalityCode = "") {
         previous,
         timeline: Array.isArray(history[key]?.timeline) ? history[key].timeline : [],
         checkedAt: stored?.checkedAt || history[key]?.checkedAt || new Date().toISOString(),
-        lastBulletinReceivedAt: history[key]?.bulletinReceivedAt || history[key]?.checkedAt || null,
+        lastBulletinReceivedAt: generatedAt(history[key]?.current) || history[key]?.bulletinReceivedAt || history[key]?.checkedAt || null,
         stale: hasActiveFailure,
         error: hasActiveFailure ? meta.lastError : "",
         upstreamStatus: meta.upstreamStatus,
