@@ -883,6 +883,7 @@ async function fetchEa20ForScope(uf, municipalityCode = "") {
         current: storedRaw,
         previous: isNewIdg ? (saved || history[key]?.previous || null) : (history[key]?.previous || null),
         checkedAt: response.checkedAt,
+        bulletinReceivedAt: response.checkedAt,
         timeline: updatedTimeline
       };
       persistHistory();
@@ -1063,6 +1064,7 @@ async function getResultForClient(uf, municipalityCode = "") {
         previous,
         timeline: Array.isArray(history[key]?.timeline) ? history[key].timeline : [],
         checkedAt: stored?.checkedAt || history[key]?.checkedAt || new Date().toISOString(),
+        lastBulletinReceivedAt: history[key]?.bulletinReceivedAt || history[key]?.checkedAt || null,
         stale: hasActiveFailure,
         error: hasActiveFailure ? meta.lastError : "",
         upstreamStatus: meta.upstreamStatus,
@@ -1088,6 +1090,7 @@ async function getResultForClient(uf, municipalityCode = "") {
     payload: {
       snapshot: null,
       previous: null,
+      lastBulletinReceivedAt: null,
       stale: true,
       error: meta.lastError || "Aguardando o coletor central consultar este recorte no próximo slot.",
       upstreamStatus: meta.upstreamStatus,

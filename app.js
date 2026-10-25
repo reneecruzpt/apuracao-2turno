@@ -44,6 +44,7 @@
     statusLabel: $("status-label"),
     updatedLabel: $("updated-label"),
     countdownLabel: $("countdown-label"),
+    bulletinReceivedLabel: $("bulletin-received-label"),
     pauseButton: $("pause-button"),
     resultState: $("result-state"),
     stateTitle: $("state-title"),
@@ -332,6 +333,16 @@
     }).format(date).replace(".", "");
   }
 
+  function formatBulletinTime(iso) {
+    if (!iso) return "—";
+    const date = new Date(iso);
+    if (Number.isNaN(date.getTime())) return "—";
+    return new Intl.DateTimeFormat("pt-BR", {
+      hour: "2-digit", minute: "2-digit", second: "2-digit",
+      hourCycle: "h23", timeZone: "America/Sao_Paulo"
+    }).format(date) + " BRT";
+  }
+
   function setResultState(title, message, kind = "wait") {
     view.resultState.hidden = false;
     view.resultState.dataset.kind = kind;
@@ -605,6 +616,9 @@
 
   function renderSnapshot(snapshot, previous, options = {}) {
     view.resultState.hidden = true;
+    if (view.bulletinReceivedLabel) {
+      view.bulletinReceivedLabel.textContent = formatBulletinTime(snapshot.bulletinReceivedAt);
+    }
     if (options.message) setResultState(
       options.stale ? "Última leitura válida preservada" : "Dados oficiais validados",
       options.message,
@@ -1396,6 +1410,10 @@
         mergeServerTimeline(target, payload.timeline);
       }
       const snapshot = validateData(payload.snapshot, target);
+      const bulletinReceivedAt = payload.lastBulletinReceivedAt;
+      snapshot.bulletinReceivedAt = typeof bulletinReceivedAt === "string" && Number.isFinite(Date.parse(bulletinReceivedAt))
+        ? bulletinReceivedAt
+        : null;
       const previous = payload.previous ? validateData(payload.previous, target) : null;
       return {
         snapshot,
