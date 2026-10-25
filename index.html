@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0d0f14">
+  <meta name="description" content="Acompanhe a apuração presidencial do segundo turno de 2026 com dados oficiais do TSE.">
+  <title>Apuração presidencial 2026 — Painel independente</title>
+  <link rel="icon" href="marca.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://resultados.tse.jus.br" crossorigin>
+  <link rel="preload" href="assets/fonts/PlayfairDisplay-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/DMSans-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="style.css?v=20">
+  <script src="app.js?v=17" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#conteudo">Ir para o placar</a>
+
+  <header class="site-header">
+    <a class="brand" href="./" aria-label="Apuração 2026 — início">
+      <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="brand-copy"><strong>APURAÇÃO</strong><small>PAINEL INDEPENDENTE · 2026</small></span>
+    </a>
+    <nav class="header-nav" aria-label="Navegação principal">
+      <a class="nav-current" href="#apuracao">Segundo turno</a>
+      <a href="primeiro-turno/" aria-label="Consultar arquivo do primeiro turno">Arquivo do 1º turno <span aria-hidden="true">↗</span></a>
+    </nav>
+    <a class="source-link" id="source-link" href="https://resultados.tse.jus.br/oficial/app/index.html#/eleicao/6258/uf/br/cargo/1/vis/nominal/resultados" target="_blank" rel="noreferrer">
+      <span class="source-dot" aria-hidden="true"></span> Dados do TSE <span aria-hidden="true">↗</span>
+    </a>
+  </header>
+
+  <main id="conteudo" class="page-shell">
+    <section class="masthead" aria-labelledby="page-title">
+      <div class="masthead-copy">
+        <p class="eyebrow"><span class="eyebrow-mark" aria-hidden="true"></span> ELEIÇÕES 2026 <span class="eyebrow-divider">/</span> PRESIDÊNCIA</p>
+        <h1 id="page-title">Segundo turno, <em>voto a voto.</em></h1>
+        <p class="masthead-lede">O placar acompanha os dados oficiais do TSE em tempo real, sem projeções.</p>
+      </div>
+      <div class="masthead-aside">
+        <div class="masthead-facts" aria-label="Informações da totalização oficial">
+          <div class="masthead-fact">
+            <span class="masthead-fact-label">INÍCIO DA APURAÇÃO</span>
+            <strong>17h00 <small>BRT</small></strong>
+            <span class="masthead-fact-sub">Horário de Brasília</span>
+          </div>
+          <div class="masthead-fact">
+            <span class="masthead-fact-label">ABRANGÊNCIA TSE</span>
+            <strong>27 UFs</strong>
+            <span class="masthead-fact-sub">5.570 municípios + Exterior</span>
+          </div>
+        </div>
+        <div class="date-stamp" aria-label="Data do segundo turno: 25 de outubro de 2026">
+          <span class="date-stamp-label">DOMINGO</span>
+          <strong>25</strong>
+          <span class="date-stamp-bottom">OUT <i></i> 2026</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="live-strip" aria-label="Estado da conexão com os dados oficiais">
+      <div class="live-state">
+        <span class="live-pulse" id="status-indicator" aria-hidden="true"></span>
+        <span class="live-label" id="status-label">Aguardando o TSE</span>
+      </div>
+      <div class="live-meta">
+        <span id="updated-label">Sem leitura oficial carregada</span>
+        <span class="live-divider" aria-hidden="true"></span>
+        <span>Próxima leitura do servidor <strong id="countdown-label">—</strong></span>
+      </div>
+      <div class="live-actions">
+        <button class="text-button" id="pause-button" type="button" aria-pressed="false">Pausar</button>
+      </div>
+    </section>
+
+    <section class="location-section" aria-label="Escolher abrangência">
+      <div class="location-head">
+        <div class="section-kicker"><span>RECORTE GEOGRÁFICO · PAÍS → ESTADO → CIDADE</span></div>
+        <div class="location-current">
+          <span class="location-pin" aria-hidden="true"></span>
+          <strong id="scope-label">Brasil</strong>
+          <span class="scope-file" id="scope-file">PAÍS</span>
+        </div>
+      </div>
+      <div class="location-controls">
+        <label class="field-wrap" for="state-select">
+          <span class="field-label">Brasil ou estado</span>
+          <select id="state-select" aria-label="Selecionar Brasil ou estado">
+            <option value="br">Brasil (País inteiro)</option>
+            <option value="ac">Acre</option><option value="al">Alagoas</option><option value="ap">Amapá</option>
+            <option value="am">Amazonas</option><option value="ba">Bahia</option><option value="ce">Ceará</option>
+            <option value="df">Distrito Federal</option><option value="es">Espírito Santo</option><option value="go">Goiás</option>
+            <option value="ma">Maranhão</option><option value="mt">Mato Grosso</option><option value="ms">Mato Grosso do Sul</option>
+            <option value="mg">Minas Gerais</option><option value="pa">Pará</option><option value="pb">Paraíba</option>
+            <option value="pr">Paraná</option><option value="pe">Pernambuco</option><option value="pi">Piauí</option>
+            <option value="rj">Rio de Janeiro</option><option value="rn">Rio Grande do Norte</option><option value="rs">Rio Grande do Sul</option>
+            <option value="ro">Rondônia</option><option value="rr">Roraima</option><option value="sc">Santa Catarina</option>
+            <option value="sp">São Paulo</option><option value="se">Sergipe</option><option value="to">Tocantins</option>
+          </select>
+        </label>
+        <div class="municipality-lookup">
+          <div class="field-label-row">
+            <label class="field-label" for="municipality-select">Cidade (por estado)</label>
+            <button id="municipality-clear" class="municipality-clear" type="button" aria-label="Voltar para o resultado do estado" hidden>Voltar ao estado</button>
+          </div>
+          <select id="municipality-select" aria-label="Selecionar uma cidade do estado escolhido" aria-describedby="municipality-note" disabled>
+            <option value="">Escolha um estado</option>
+          </select>
+          <p id="municipality-note" class="municipality-note" aria-live="polite">Escolha um estado (na lista ou clicando no mapa) para listar suas cidades.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="counting-section" id="apuracao" aria-labelledby="counting-title">
+      <div class="section-heading">
+        <div>
+          <div class="section-kicker"><span id="scope-Trail">PLACAR OFICIAL · PAÍS (BRASIL)</span></div>
+          <h2 id="counting-title">Brasil <span class="heading-caption">Presidência</span></h2>
+        </div>
+        <p class="section-aside" id="generation-label">Aguardando a primeira parcial oficial</p>
+      </div>
+
+      <div class="result-state" id="result-state" role="status" aria-live="polite" hidden>
+        <span class="state-symbol" aria-hidden="true">●</span>
+        <div><strong id="state-title">Conectando aos dados oficiais</strong><p id="state-message">O placar aparece depois da validação do arquivo do TSE.</p></div>
+      </div>
+
+      <!-- Palco Principal (Election Night Premium): Duelo com Barra Compartilhada Animada à esquerda | Mapa Interativo do Brasil à direita -->
+      <div class="election-stage">
+        <div class="stage-dispute">
+          <div class="stage-panel-head">
+            <span class="stage-panel-title">Disputa Presidencial · Votos Válidos</span>
+            <span class="stage-panel-meta" id="stage-scope-badge">Abrangência: Brasil</span>
+          </div>
+
+          <!-- Placar Duelo (Estilo VG): Lula à esquerda, Barra compartilhada Vermelho x Verde animada no centro, Flávio à direita -->
+          <div class="scoreboard duel-arena" id="scoreboard" aria-label="Comparação direta entre Lula e Flávio Bolsonaro" aria-live="off" hidden>
+            <div class="duel-top-grid">
+              <!-- Lado Esquerdo: Lula (13) -->
+              <article class="candidate-card duel-combatant candidate-lula" id="candidate-13" aria-label="Lula, candidato número 13">
+                <div class="candidate-avatar-ring">
+                  <div class="candidate-portrait">
+                    <img src="assets/candidato-13.jpeg" alt="Foto de Lula" loading="lazy" decoding="async">
+                  </div>
+                  <span class="candidate-badge" id="position-13" hidden title="Na liderança">✓</span>
+                </div>
+                <h3 class="candidate-name" id="name-13">Lula</h3>
+                <div class="candidate-meta">
+                  <span class="candidate-party" id="party-13">PT</span>
+                  <span class="meta-sep" aria-hidden="true">·</span>
+                  <span class="candidate-number" id="number-13">13</span>
+                </div>
+              </article>
+
+              <!-- Centro: Números Grandes + Marcador de Maioria (50%) + Barra Compartilhada Animada Vermelho x Verde -->
+              <div class="duel-center">
+                <div class="duel-scores-row">
+                  <div class="duel-score-side duel-score-lula">
+                    <div class="candidate-share"><span id="share-13">0,00%</span></div>
+                    <div class="candidate-votes"><span id="votes-13">0</span> votos</div>
+                    <div class="candidate-delta" id="delta-13"></div>
+                  </div>
+
+                  <div class="duel-majority-marker" aria-hidden="true">
+                    <strong>50%</strong>
+                    <span>maioria dos<br>votos válidos</span>
+                    <i class="majority-line-drop"></i>
+                  </div>
+
+                  <div class="duel-score-side duel-score-flavio">
+                    <div class="candidate-share"><span id="share-22">0,00%</span></div>
+                    <div class="candidate-votes"><span id="votes-22">0</span> votos</div>
+                    <div class="candidate-delta" id="delta-22"></div>
+                  </div>
+                </div>
+
+                <!-- Barra Única Compartilhada (Vermelho x Verde) com Animação Contínua em Tempo Real -->
+                <div class="duel-shared-track" role="img" aria-label="Barra compartilhada da divisão de votos válidos entre Lula (vermelho) e Flávio Bolsonaro (verde)">
+                  <div class="duel-bar-fill duel-fill-lula" id="comparison-bar-13" style="width: 50%">
+                    <span class="duel-bar-wave" aria-hidden="true"></span>
+                  </div>
+                  <div class="duel-bar-fill duel-fill-flavio" id="comparison-bar-22" style="width: 50%">
+                    <span class="duel-bar-wave" aria-hidden="true"></span>
+                  </div>
+                  <span class="duel-center-tick" aria-hidden="true"></span>
+                </div>
+
+                <div class="duel-bar-captions">
+                  <span class="duel-caption-lula"><i></i><span>Lula (<strong id="chart-share-13">0,00%</strong>)</span></span>
+                  <span class="duel-caption-status" id="chart-vote-diff">Aguardando abertura das urnas</span>
+                  <span class="duel-caption-flavio"><span>Flávio (<strong id="chart-share-22">0,00%</strong>)</span><i></i></span>
+                </div>
+              </div>
+
+              <!-- Lado Direito: Flávio Bolsonaro (22) -->
+              <article class="candidate-card duel-combatant candidate-flavio" id="candidate-22" aria-label="Flávio Bolsonaro, candidato número 22">
+                <div class="candidate-avatar-ring">
+                  <div class="candidate-portrait">
+                    <img src="assets/candidato-22.jpeg" alt="Foto de Flávio Bolsonaro" loading="lazy" decoding="async">
+                  </div>
+                  <span class="candidate-badge" id="position-22" hidden title="Na liderança">✓</span>
+                </div>
+                <h3 class="candidate-name" id="name-22">Flávio Bolsonaro</h3>
+                <div class="candidate-meta">
+                  <span class="candidate-party" id="party-22">PL</span>
+                  <span class="meta-sep" aria-hidden="true">·</span>
+                  <span class="candidate-number" id="number-22">22</span>
+                </div>
+              </article>
+            </div>
+          </div>
+
+          <!-- Painel de Andamento da Apuração na Localidade (País -> Estado -> Cidade) -->
+          <div class="scope-chart" id="comparison-key" hidden aria-label="Andamento da apuração na localidade selecionada">
+            <div class="scope-chart-head">
+              <div class="scope-chart-title">
+                <span class="comparison-label">RESULTADO APURADO ATÉ O MOMENTO · LOCALIDADE ATIVA</span>
+                <strong id="chart-scope-path">Brasil (País inteiro)</strong>
+              </div>
+              <span class="comparison-caption" id="comparison-caption">0,00% Lula · 0,00% Flávio</span>
+            </div>
+
+            <div class="scope-chart-bars">
+              <div class="chart-row chart-row-sections">
+                <div class="chart-row-meta">
+                  <span>Andamento das seções eleitorais (<span id="chart-valid-votes">0</span> votos válidos)</span>
+                  <strong id="chart-sections-summary">0,00% apurado (0 de — seções)</strong>
+                </div>
+                <div class="section-meter chart-section-meter" aria-hidden="true">
+                  <span id="chart-sections-meter"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mapa Gráfico Temporal Minimizado (Início 17h00 Brasília -> Fim da Apuração) -->
+          <div class="timeline-mini-card" id="timeline-card" role="button" tabindex="0" aria-haspopup="dialog" aria-controls="timeline-modal" aria-label="Evolução temporal da votação das 17h até o fim da apuração. Clique para expandir em janela." hidden>
+            <div class="timeline-mini-head">
+              <div class="timeline-mini-titles">
+                <span class="comparison-label">EVOLUÇÃO TEMPORAL · 17H00 BRASÍLIA → FIM DA VOTAÇÃO</span>
+                <strong id="timeline-mini-heading">Curva de Apuração · Lula × Flávio</strong>
+              </div>
+              <button type="button" class="timeline-expand-btn" id="timeline-open-btn" tabindex="-1">
+                <span aria-hidden="true">⤢</span> Expandir gráfico
+              </button>
+            </div>
+
+            <div class="timeline-mini-body">
+              <div class="timeline-mini-canvas">
+                <svg id="timeline-svg-mini" class="timeline-svg" viewBox="0 0 560 128" preserveAspectRatio="none" aria-label="Gráfico compacto de linhas comparando Lula e Flávio ao longo do tempo"></svg>
+              </div>
+
+              <!-- Emblemas Laterais no Estilo g1 / RealClearPolitics -->
+              <div class="timeline-mini-badges" aria-hidden="true">
+                <div class="tl-pill tl-pill-lula">
+                  <span>Lula</span>
+                  <strong id="tl-mini-share-13">0,0%</strong>
+                </div>
+                <div class="tl-pill tl-pill-flavio">
+                  <span>Flávio</span>
+                  <strong id="tl-mini-share-22">0,0%</strong>
+                </div>
+                <div class="tl-mini-summary" id="tl-mini-diff">Início às 17h00 BRT</div>
+              </div>
+            </div>
+
+            <div class="timeline-mini-foot">
+              <span id="timeline-mini-status">Linha do tempo: abertura às 17h00 (Horário de Brasília) · marcadores a cada 15 min</span>
+              <span class="timeline-mini-hint">Clique para acompanhar em janela expandida →</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Coluna Geografia: Mapa do Brasil Clicável por Estado -->
+        <aside class="stage-geography" aria-label="Mapa eleitoral do Brasil por estado">
+          <div class="stage-panel-head">
+            <span class="stage-panel-title">Geografia · Estados</span>
+            <div class="map-head-actions">
+              <button type="button" class="map-reset-btn" id="map-reset-btn" hidden>← Ver Brasil inteiro</button>
+              <span class="map-count-pills">
+                <span class="map-pill pill-lula" title="Estados com Lula à frente">Lula <strong id="map-count-13">0</strong></span>
+                <span class="map-pill pill-flavio" title="Estados com Flávio à frente">Flávio <strong id="map-count-22">0</strong></span>
+                <span class="map-pill pill-neutral" title="Estados aguardando votos">Neutros <strong id="map-count-neutral">27</strong></span>
+              </span>
+            </div>
+          </div>
+
+          <div class="brazil-map-card">
+            <div class="brazil-map-wrap" id="brazil-map-wrap">
+              <svg id="brazil-map" class="brazil-map-svg" viewBox="0 0 613 639" role="group" aria-label="Mapa interativo dos 27 estados do Brasil"></svg>
+            </div>
+
+            <div class="map-info-bar" id="map-info-bar" aria-live="polite">
+              <div class="map-info-main">
+                <strong id="map-info-title">Brasil · 27 Unidades da Federação</strong>
+                <span id="map-info-status">Clique em qualquer estado no mapa para filtrar o resultado e listar suas cidades.</span>
+              </div>
+              <span class="map-info-badge" id="map-info-badge">PAÍS</span>
+            </div>
+
+            <div class="map-legend" aria-label="Legenda de cores do mapa">
+              <span class="map-legend-item"><i class="swatch-lula"></i> Lula vencendo</span>
+              <span class="map-legend-item"><i class="swatch-flavio"></i> Flávio vencendo</span>
+              <span class="map-legend-item"><i class="swatch-neutral"></i> Neutro / Sem votos</span>
+              <span class="map-legend-item"><i class="swatch-selected"></i> UF selecionada</span>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <div class="math-banner" id="math-banner" hidden aria-live="polite">
+        <span class="math-seal" aria-hidden="true">✓</span><div><p class="eyebrow">APURAÇÃO · GARANTIA MATEMÁTICA</p><strong id="math-copy">Vitória matematicamente garantida</strong><span id="math-detail">A condição é calculada somente com dados oficiais válidos.</span></div>
+      </div>
+
+      <div class="tally-grid" id="tally-grid" hidden>
+        <article class="tally-item tally-progress">
+          <span class="tally-label">Seções totalizadas</span>
+          <strong id="sections-count">— <small>de —</small></strong>
+          <div class="section-meter" aria-hidden="true"><span id="sections-meter"></span></div>
+          <span class="tally-foot" id="sections-percent">— das seções</span>
+        </article>
+        <article class="tally-item">
+          <span class="tally-label">Votos válidos</span>
+          <strong id="valid-votes">—</strong>
+          <span class="tally-foot">total informado pelo TSE</span>
+        </article>
+        <article class="tally-item">
+          <span class="tally-label">Eleitorado apto</span>
+          <strong id="electorate-total">—</strong>
+          <span class="tally-foot">nesta localidade</span>
+        </article>
+      </div>
+
+      <div class="vote-breakdown" id="vote-breakdown" hidden aria-label="Contabilização dos votos">
+        <div><span>Comparecimento</span><strong id="turnout-count">—</strong></div>
+        <div><span>Abstenção</span><strong id="abstention-count">—</strong></div>
+        <div><span>Em branco</span><strong id="blank-votes">—</strong></div>
+        <div><span>Nulos</span><strong id="null-votes">—</strong></div>
+        <div><span>Anulados</span><strong id="annulled-votes">—</strong></div>
+        <div><span>Eleitorado não apurado</span><strong id="remaining-voters">—</strong></div>
+      </div>
+
+      <div class="previous-strip" id="previous-strip" hidden>
+        <div class="previous-label">
+          <span class="previous-icon" aria-hidden="true">↗</span>
+          <div><p class="eyebrow">MOVIMENTO DESDE A PARCIAL ANTERIOR</p><strong id="previous-time">—</strong></div>
+        </div>
+        <p id="previous-summary">A variação será mostrada após uma nova versão do arquivo oficial.</p>
+      </div>
+    </section>
+
+    <section class="method-section" aria-labelledby="method-title">
+      <div class="method-heading">
+        <div class="section-kicker"><span>COMO LER ESTE PLACAR</span></div>
+        <h2 id="method-title">Parcial não é previsão.</h2>
+      </div>
+      <div class="method-copy">
+        <p>Os dados são lidos dos arquivos públicos do Tribunal Superior Eleitoral. A variação compara apenas a versão anterior do mesmo recorte.</p>
+        <p>Uma liderança não é resultado final. A garantia matemática exige que a vantagem supere todo o eleitorado ainda não apurado. O resultado oficial só é identificado após a conclusão nacional informada pelo TSE.</p>
+        <a href="https://www.tse.jus.br/eleicoes/informacoes-tecnicas-sobre-a-divulgacao-de-resultados" target="_blank" rel="noreferrer">Documentação técnica do TSE <span aria-hidden="true">↗</span></a>
+      </div>
+    </section>
+
+    <section class="trust-footer" aria-label="Transparência">
+      <div class="trust-item"><span class="trust-index">FONTE</span><span><strong>Tribunal Superior Eleitoral</strong><br>Dados públicos oficiais</span></div>
+      <div class="trust-item"><span class="trust-index">ATUALIZAÇÃO</span><span><strong>Leitura a cada 5 segundos</strong><br>Coletor central único no servidor</span></div>
+      <div class="trust-item"><span class="trust-index">HISTÓRICO</span><span><strong>Série temporal 17h → Fim</strong><br>Guardada por recorte no serviço</span></div>
+    </section>
+  </main>
+
+  <!-- Janela Modal Expandida: Mapa Gráfico Temporal (17h00 Brasília -> Fim da Apuração) -->
+  <div class="timeline-modal-backdrop" id="timeline-modal" role="dialog" aria-modal="true" aria-labelledby="timeline-modal-title" hidden>
+    <div class="timeline-modal-window">
+      <header class="timeline-modal-header">
+        <div>
+          <div class="section-kicker">
+            <span>EVOLUÇÃO TEMPORAL DA APURAÇÃO · INÍCIO ÀS 17H00 (HORÁRIO DE BRASÍLIA)</span>
+            <span class="tl-mode-badge" id="timeline-mode-badge">DADOS OFICIAIS DO TSE</span>
+          </div>
+          <h2 id="timeline-modal-title">Curva de Votação — <span id="timeline-modal-scope">Brasil (País inteiro)</span></h2>
+        </div>
+        <div class="timeline-modal-actions">
+          <button type="button" class="tl-demo-btn" id="timeline-demo-toggle" aria-pressed="false" title="Visualizar simulação de curva completa das 17h00 até o encerramento">
+            Prévia visual (17h → Fim)
+          </button>
+          <button type="button" class="tl-close-btn" id="timeline-close-btn" aria-label="Fechar janela do gráfico temporal">
+            ✕ Fechar
+          </button>
+        </div>
+      </header>
+
+      <!-- Barra de Controles de Marcadores Temporais e Escala -->
+      <div class="timeline-controls-bar">
+        <div class="tl-control-group" role="group" aria-label="Intervalo de marcadores de tempo no gráfico">
+          <span class="tl-control-label">Marcadores na linha do tempo:</span>
+          <button type="button" class="tl-chip" data-marker-mins="5">5 min (Alta densidade)</button>
+          <button type="button" class="tl-chip is-active" data-marker-mins="15">15 min (Recomendado)</button>
+          <button type="button" class="tl-chip" data-marker-mins="30">30 min</button>
+          <button type="button" class="tl-chip" data-marker-mins="0">Cada parcial TSE</button>
+        </div>
+
+        <div class="tl-control-group" role="group" aria-label="Escala vertical do gráfico">
+          <span class="tl-control-label">Escala Y:</span>
+          <button type="button" class="tl-chip is-active" data-y-scale="zoom" id="tl-scale-zoom">Zoom Disputa</button>
+          <button type="button" class="tl-chip" data-y-scale="full" id="tl-scale-full">0% a 100%</button>
+        </div>
+      </div>
+
+      <!-- Palco Principal do Gráfico Expandido (Estilo g1 / RealClearPolitics) -->
+      <div class="timeline-expanded-grid">
+        <div class="timeline-chart-stage" id="timeline-chart-stage">
+          <div class="timeline-chart-topline">
+            <span class="tl-origin-tag"><strong>17h00 BRT</strong> · Abertura oficial da apuração</span>
+            <span class="tl-hover-readout" id="timeline-hover-readout">Passe o cursor sobre o gráfico para inspecionar cada horário</span>
+            <span class="tl-end-tag" id="timeline-end-tag">Encerramento: 100% das seções</span>
+          </div>
+
+          <div class="timeline-svg-wrap" id="timeline-svg-wrap">
+            <svg id="timeline-svg-expanded" class="timeline-svg-large" viewBox="0 0 920 360" aria-label="Gráfico temporal expandido comparando a evolução de votos válidos de Lula e Flávio Bolsonaro"></svg>
+          </div>
+        </div>
+
+        <!-- Painel Lateral de Comparação (Estilo RealClearPolitics / g1) -->
+        <aside class="timeline-side-summary" aria-label="Resumo da série temporal">
+          <div class="tl-side-card tl-side-lula">
+            <div class="tl-side-head">
+              <span class="tl-side-dot"></span>
+              <strong>Lula (PT · 13)</strong>
+            </div>
+            <div class="tl-side-pct" id="tl-exp-share-13">0,00%</div>
+            <div class="tl-side-votes" id="tl-exp-votes-13">0 votos</div>
+          </div>
+
+          <div class="tl-side-card tl-side-flavio">
+            <div class="tl-side-head">
+              <span class="tl-side-dot"></span>
+              <strong>Flávio Bolsonaro (PL · 22)</strong>
+            </div>
+            <div class="tl-side-pct" id="tl-exp-share-22">0,00%</div>
+            <div class="tl-side-votes" id="tl-exp-votes-22">0 votos</div>
+          </div>
+
+          <div class="tl-rcp-box" aria-label="Quadro comparativo de vantagem">
+            <div class="tl-rcp-row">
+              <span class="tl-rcp-tag tag-lula" id="tl-rcp-13">0,0</span>
+              <span class="tl-rcp-name">Lula (PT)</span>
+              <strong class="tl-rcp-diff" id="tl-rcp-diff-13">—</strong>
+            </div>
+            <div class="tl-rcp-row">
+              <span class="tl-rcp-tag tag-flavio" id="tl-rcp-22">0,0</span>
+              <span class="tl-rcp-name">Flávio (PL)</span>
+              <strong class="tl-rcp-diff" id="tl-rcp-diff-22">—</strong>
+            </div>
+          </div>
+
+          <div class="tl-milestones-box">
+            <span class="tl-milestones-title">MARCOS DA LINHA DO TEMPO</span>
+            <ul class="tl-milestones-list" id="timeline-milestones-list">
+              <li><span>17h00</span> <strong>Início da janela oficial (Brasília)</strong></li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <a class="brand footer-brand" href="./">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="brand-copy"><strong>APURAÇÃO</strong><small>BRASIL · 2026</small></span>
+      </a>
+      <p>Projeto independente. Informação oficial, sem projeções.</p>
+      <a href="primeiro-turno/" class="footer-archive">Ver arquivo do 1º turno <span aria-hidden="true">↗</span></a>
+    </div>
+  </footer>
+</body>
+</html>
