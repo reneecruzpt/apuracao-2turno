@@ -1062,9 +1062,12 @@
     if (waiting || !points.length) {
       // Estado inicial antes das primeiras urnas: ponto de partida às 17h00 em 50%
       const yMid = yOf(50).toFixed(1);
+      const waitMsg = isExpanded
+        ? "Aguardando abertura das urnas às 17h00 (Brasília) · a curva avança na horizontal a cada parcial"
+        : "Aguardando abertura das urnas às 17h00 (Horário de Brasília)";
       parts.push(
         `<circle cx="${padLeft}" cy="${yMid}" r="${isExpanded ? "5" : "4"}" fill="#e8b84b" stroke="#0b0e14" stroke-width="2"/>`,
-        `<text x="${padLeft + plotW / 2}" y="${(Number(yMid) - (isExpanded ? 14 : 8)).toFixed(1)}" text-anchor="middle" fill="#9ea6b8" font-family="DM Sans, sans-serif" font-size="${isExpanded ? "12" : "9.5"}" font-weight="600">Aguardando abertura das urnas às 17h00 (Brasília) · a curva avança na horizontal a cada parcial</text>`
+        `<text x="${padLeft + plotW / 2}" y="${(Number(yMid) - (isExpanded ? 14 : 8)).toFixed(1)}" text-anchor="middle" fill="#9ea6b8" font-family="DM Sans, sans-serif" font-size="${isExpanded ? "12" : "9.5"}" font-weight="600">${waitMsg}</text>`
       );
       svgEl.innerHTML = parts.join("");
       return;
