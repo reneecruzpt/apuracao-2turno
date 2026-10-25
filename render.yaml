@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: apuracao-2turno
+    runtime: node
+    plan: free
+    buildCommand: npm install --omit=dev --no-audit --no-fund
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: HOST
+        value: 0.0.0.0
