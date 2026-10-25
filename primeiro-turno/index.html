@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Painel independente de acompanhamento dos resultados oficiais do TSE nas Eleições 2026.">
+  <meta name="color-scheme" content="light dark">
+  <title>Painel TSE 2026</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+<header class="site-header">
+  <div class="wrap header-wrap">
+    <div class="top">
+      <div class="brand">
+        <div class="eyebrow">Eleições 2026 · dados oficiais</div>
+        <h1>Painel TSE 2026</h1>
+        <div class="sub">Presidente • Lula × Flávio por UF • Governadores • Senado 1º/2º/3º por UF</div>
+      </div>
+      <div class="actions">
+        <button id="themeToggle" class="icon-button" type="button" aria-pressed="false">Tema escuro</button>
+        <button id="pauseUpdates" class="icon-button pause-button" type="button" aria-pressed="false" aria-label="Pausar atualizações automáticas" title="Pausa as atualizações automáticas sem alterar os dados na tela"><span class="control-icon" aria-hidden="true">⏸</span><span class="control-label">Pausar</span></button>
+        <button id="refresh" class="primary-button" type="button" title="Verifica no TSE o que mudou desde a última leitura">Verificar agora</button>
+        <div class="status" role="status" aria-live="polite" aria-atomic="true">
+          <span id="dot" class="dot"></span>
+          <span id="statusText">Conectando…</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="meta-grid" aria-label="Resumo da atualização">
+      <div class="meta progress-card">
+        <div class="meta-top"><span class="k">Seções totalizadas — Brasil</span><span class="v" id="progress">—</span></div>
+        <div id="progressTrack" class="progress-track" role="progressbar" aria-label="Seções totalizadas no Brasil" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <span id="progressBar" class="progress-bar"></span>
+        </div>
+      </div>
+      <div class="meta"><div class="k">Geração TSE</div><div class="v compact" id="tseTime">—</div></div>
+      <div class="meta"><div class="k">Última consulta</div><div class="v compact" id="fetchTime">—</div></div>
+      <div class="meta"><div class="k">Próxima atualização</div><div class="v compact" id="countdown">—</div></div>
+    </div>
+
+    <div id="errors" class="errors" role="alert"></div>
+    <div id="liveStatus" class="sr-only" aria-live="polite"></div>
+  </div>
+</header>
+
+<main id="conteudo" tabindex="-1" aria-busy="true">
+  <nav class="mobile-nav" role="tablist" aria-label="Seções do painel">
+    <a id="tab-presidente" class="mobile-tab" role="tab" href="#presidente" aria-controls="presidente" aria-selected="true" data-tab-target="presidente">Presidente</a>
+    <a id="tab-estados" class="mobile-tab" role="tab" href="#estados" aria-controls="estados" aria-selected="false" data-tab-target="estados">Lula × Flávio</a>
+    <a id="tab-governadores" class="mobile-tab" role="tab" href="#governadores" aria-controls="governadores" aria-selected="false" data-tab-target="governadores">Governadores</a>
+    <a id="tab-senado" class="mobile-tab" role="tab" href="#senado" aria-controls="senado" aria-selected="false" data-tab-target="senado">Senado</a>
+  </nav>
+
+  <section id="presidente" class="panel mobile-tab-panel" aria-labelledby="pres-title" data-mobile-panel="presidente">
+    <div class="section-head">
+      <div>
+        <h2 id="pres-title">Presidente — cenário geral</h2>
+        <p class="section-note">Lula, Flávio Bolsonaro e todos os demais candidatos acima de 1,00% dos votos válidos.</p>
+      </div>
+      <span class="data-badge">Brasil</span>
+    </div>
+    <div class="tablebox">
+      <table class="president-table">
+        <caption class="sr-only">Resultado nacional para Presidente da República</caption>
+        <thead><tr><th scope="col">Candidato</th><th scope="col">Partido</th><th scope="col" class="num">Votos</th><th scope="col" class="num">% válidos</th></tr></thead>
+        <tbody id="presBody"><tr><td colspan="4" class="msg">Carregando…</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="estados" class="panel mobile-tab-panel" aria-labelledby="states-title" data-mobile-panel="estados">
+    <div class="section-head state-head">
+      <div>
+        <h2 id="states-title">Lula × Flávio — por estado</h2>
+        <p class="section-note"><span class="legend lula"></span>Lula à frente &nbsp; <span class="legend flavio"></span>Flávio à frente. A diferença também identifica o líder por nome.</p>
+      </div>
+      <span id="stateCount" class="data-badge">27 UFs</span>
+    </div>
+
+    <div class="filters" aria-label="Filtros da tabela por estado">
+      <div class="filter-group region-filter-group" role="group" aria-label="Região">
+        <span class="filter-label">Região</span>
+        <button class="chip region-chip" type="button" data-region="ALL" aria-pressed="true">Todas</button>
+        <button class="chip region-chip" type="button" data-region="N" aria-pressed="false">Norte</button>
+        <button class="chip region-chip" type="button" data-region="NE" aria-pressed="false">Nordeste</button>
+        <button class="chip region-chip" type="button" data-region="CO" aria-pressed="false">Centro-Oeste</button>
+        <button class="chip region-chip" type="button" data-region="SE" aria-pressed="false">Sudeste</button>
+        <button class="chip region-chip" type="button" data-region="S" aria-pressed="false">Sul</button>
+      </div>
+      <div class="filter-group highlight-filter-group" role="group" aria-label="Filtros rápidos">
+        <span class="filter-label">Destaques</span>
+        <button id="closeFilter" class="chip" type="button" aria-pressed="false">Margem &lt; 5 p.p.</button>
+        <button id="progressFilter" class="chip" type="button" aria-pressed="false">Apuração ≥ 50%</button>
+        <button id="resetFilters" class="text-button" type="button">Limpar</button>
+      </div>
+    </div>
+
+    <div class="mobile-sort-controls" aria-label="Ordenação dos estados">
+      <label for="mobileStateSort">Ordenar por</label>
+      <select id="mobileStateSort">
+        <option value="uf">UF</option>
+        <option value="lula">Lula %</option>
+        <option value="flavio">Flávio %</option>
+        <option value="diff">Diferença %</option>
+        <option value="diffVotes">Diferença de votos</option>
+        <option value="progress">Seções totalizadas</option>
+      </select>
+      <button id="mobileSortDirection" class="sort-direction-button" type="button" aria-label="Alternar direção da ordenação" title="Alternar direção da ordenação">↑</button>
+    </div>
+
+    <div class="tablebox states-box">
+      <table class="state-table">
+        <caption class="sr-only">Comparação entre Lula e Flávio Bolsonaro por unidade da federação</caption>
+        <thead><tr>
+          <th scope="col" data-sort-th="uf"><button class="sort-btn" type="button" data-sort="uf">UF <span class="sort-indicator" aria-hidden="true"></span></button></th>
+          <th scope="col" class="num" data-sort-th="lula"><button class="sort-btn" type="button" data-sort="lula">Lula % <span class="sort-indicator" aria-hidden="true"></span></button></th>
+          <th scope="col" class="num" data-sort-th="flavio"><button class="sort-btn" type="button" data-sort="flavio">Flávio % <span class="sort-indicator" aria-hidden="true"></span></button></th>
+          <th scope="col" class="num" data-sort-th="diff"><button class="sort-btn" type="button" data-sort="diff">Diferença % <span class="sort-indicator" aria-hidden="true"></span></button></th>
+          <th scope="col" class="num" data-sort-th="diffVotes"><button class="sort-btn" type="button" data-sort="diffVotes">Diferença de votos <span class="sort-indicator" aria-hidden="true"></span></button></th>
+          <th scope="col" class="num" data-sort-th="progress"><button class="sort-btn" type="button" data-sort="progress">Seções totalizadas <span class="sort-indicator" aria-hidden="true"></span></button></th>
+        </tr></thead>
+        <tbody id="stateBody"><tr><td colspan="6" class="msg">Carregando…</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="governadores" class="panel mobile-tab-panel" aria-labelledby="gov-title" data-mobile-panel="governadores">
+    <div class="section-head">
+      <div>
+        <h2 id="gov-title">Governadores — 1º, 2º e 3º colocados por estado</h2>
+        <p class="section-note">1º e 2º acompanham a faixa do eventual 2º turno; <span class="legend outside"></span>3º aparece em vermelho como fora dessa faixa no momento. Durante a parcial, <span class="runoff-badge demo">↪ 2º turno definido</span> e <span class="math-official-badge demo">🔒 Eleito matematicamente</span> usam <code>md</code>; após a totalização final, o painel usa a situação oficial <code>st</code> para distinguir eleito de classificado ao 2º turno.</p>
+      </div>
+      <span class="data-badge">1 vaga / UF</span>
+    </div>
+    <div class="section-filter" aria-label="Filtro de Governadores por estado">
+      <label for="govStateFilter">Estado</label>
+      <select id="govStateFilter">
+        <option value="ALL">Todos os estados</option>
+      </select>
+      <button id="govStateClear" class="text-button" type="button">Limpar</button>
+    </div>
+    <div class="tablebox governor-box">
+      <table class="governor-table">
+        <caption class="sr-only">Primeiro, segundo e terceiro colocados para Governador em cada unidade da federação</caption>
+        <thead><tr>
+          <th scope="col">UF</th><th scope="col">Situação</th><th scope="col">1º colocado</th><th scope="col">Partido</th><th scope="col" class="num">%</th>
+          <th scope="col">2º colocado</th><th scope="col">Partido</th><th scope="col" class="num">%</th>
+          <th scope="col">3º colocado · fora</th><th scope="col">Partido</th><th scope="col" class="num">%</th>
+          <th scope="col" class="num">Dist. p/ 2º</th><th scope="col" class="num">Seções totalizadas</th>
+        </tr></thead>
+        <tbody id="govBody"><tr><td colspan="13" class="msg">Carregando…</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="senado" class="panel mobile-tab-panel" aria-labelledby="sen-title" data-mobile-panel="senado">
+    <div class="section-head">
+      <div>
+        <h2 id="sen-title">Senado — 1º, 2º e 3º colocados por estado</h2>
+        <p class="section-note">1º e 2º estão na faixa das duas vagas; <span class="legend outside"></span>3º aparece em vermelho como fora das vagas no momento. <span class="math-badge demo">🔒 Vaga garantida</span> é um cálculo conservador pelos votos e pelo eleitorado ainda não totalizado; <span class="elected-badge demo">✓ Eleito TSE</span> é a atribuição oficial.</p>
+      </div>
+      <span class="data-badge">2 vagas / UF</span>
+    </div>
+    <div class="section-filter" aria-label="Filtro do Senado por estado">
+      <label for="senStateFilter">Estado</label>
+      <select id="senStateFilter">
+        <option value="ALL">Todos os estados</option>
+      </select>
+      <button id="senStateClear" class="text-button" type="button">Limpar</button>
+    </div>
+    <div class="tablebox senate-box">
+      <table class="senate-table">
+        <caption class="sr-only">Primeiro, segundo e terceiro colocados para o Senado em cada unidade da federação</caption>
+        <thead><tr>
+          <th scope="col">UF</th><th scope="col">1º colocado</th><th scope="col">Partido</th><th scope="col" class="num">%</th>
+          <th scope="col">2º colocado</th><th scope="col">Partido</th><th scope="col" class="num">%</th>
+          <th scope="col">3º colocado · fora</th><th scope="col">Partido</th><th scope="col" class="num">%</th>
+          <th scope="col" class="num">Dist. p/ 2º</th><th scope="col" class="num">Seções totalizadas</th>
+        </tr></thead>
+        <tbody id="senBody"><tr><td colspan="12" class="msg">Carregando…</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    <div><strong>Fonte:</strong> <a href="https://resultados.tse.jus.br" target="_blank" rel="noopener noreferrer">Tribunal Superior Eleitoral (TSE)</a> · arquivos JSON oficiais.</div>
+    <div>Painel independente; não faz projeções nem previsões. Atualização automática a cada <span id="pollLabel">15</span> segundos durante a apuração.</div>
+    <div class="privacy-note"><a href="privacidade.html">Privacidade</a> · sem cookies de publicidade ou rastreamento comportamental.</div>
+  </footer>
+</main>
+<script src="app.js"></script>
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "b7fc6c09aecf4a728567c6bbfd0ef30b"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

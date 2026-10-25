@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="Política de privacidade do Painel TSE 2026.">
+  <title>Privacidade · Painel TSE 2026</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="privacy-page">
+    <a class="privacy-back" href="./">← Voltar ao painel</a>
+    <article class="privacy-card">
+      <h1>Privacidade</h1>
+      <p>O Painel TSE 2026 é um projeto independente e utiliza dados públicos oficiais do Tribunal Superior Eleitoral.</p>
+
+      <h2>Cookies e publicidade</h2>
+      <p>O site não utiliza cookies de publicidade, remarketing ou rastreamento comportamental.</p>
+
+      <h2>Preferências locais</h2>
+      <p>Algumas preferências da interface, como tema, filtros e ordenação, podem ser armazenadas localmente no navegador por meio de <code>localStorage</code>. Essas informações permanecem no dispositivo do visitante e são usadas apenas para manter suas escolhas no painel.</p>
+
+      <h2>Métricas de acesso</h2>
+      <p>O site utiliza Cloudflare Web Analytics para obter métricas agregadas de acesso e desempenho, sem criar perfis de publicidade dos visitantes.</p>
+
+      <h2>Hospedagem</h2>
+      <p>O site é publicado por meio do GitHub Pages. O GitHub e os provedores de infraestrutura envolvidos podem processar dados técnicos necessários para entregar o conteúdo e manter a segurança do serviço, de acordo com suas próprias políticas.</p>
+
+      <p class="privacy-note">Última atualização: outubro de 2026.</p>
+    </article>
+  </main>
+  <script>
+    const saved=localStorage.getItem("tse.theme");
+    const dark=saved?saved==="dark":window.matchMedia?.("(prefers-color-scheme: dark)").matches;
+    document.documentElement.dataset.theme=dark?"dark":"light";
+  </script>
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "b7fc6c09aecf4a728567c6bbfd0ef30b"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

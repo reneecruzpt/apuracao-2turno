@@ -1,0 +1,750 @@
+:root{
+  --bg:#f3f6f9;--card:#ffffff;--card-2:#f8fafc;--ink:#102033;--muted:#64748b;--muted-2:#94a3b8;
+  --line:#dce4ec;--line-strong:#cbd5e1;--accent:#1d4f7a;--accent-2:#e9f1f8;--accent-3:#d8e8f5;
+  --ok:#17603f;--warn:#8a6517;--err:#9b2f2f;--shadow:0 1px 2px rgba(15,23,42,.03);
+  --lula-bg:#fcebec;--lula-ink:#a3212d;--lula-line:#efc4c8;
+  --flavio-bg:#eaf7ee;--flavio-ink:#17603f;--flavio-line:#bfe0c9;
+  --outside-bg:#fff0f0;--outside-ink:#a12a2a;--outside-line:#edc6c6;
+  --flash:#fff4bd;
+}
+html[data-theme="dark"]{
+  --bg:#0f1720;--card:#17212b;--card-2:#1c2834;--ink:#e6edf5;--muted:#a4b2c2;--muted-2:#77879a;
+  --line:#2c3b49;--line-strong:#3b4d5e;--accent:#8dc3ed;--accent-2:#213b50;--accent-3:#2c4b63;
+  --ok:#8fd4aa;--warn:#e6c671;--err:#f2a5a5;--shadow:none;
+  --lula-bg:#442329;--lula-ink:#ffb3ba;--lula-line:#704049;
+  --flavio-bg:#193a2b;--flavio-ink:#a6e7bd;--flavio-line:#326047;
+  --outside-bg:#422428;--outside-ink:#ffb4b4;--outside-line:#704248;
+  --flash:#66591f;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+a{color:var(--accent)}
+button{font:inherit}
+.skip-link{position:fixed;left:12px;top:-60px;z-index:1000;background:var(--ink);color:var(--card);padding:10px 14px;border-radius:8px;text-decoration:none}.skip-link:focus{top:12px}
+.site-header{background:color-mix(in srgb,var(--card) 96%,transparent);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;backdrop-filter:blur(10px)}
+.wrap{max-width:1380px;margin:auto;padding:14px 22px}.header-wrap{padding-bottom:13px}
+.top{display:flex;gap:20px;align-items:center;justify-content:space-between;flex-wrap:wrap}.brand{min-width:280px}
+.eyebrow{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.09em;color:var(--accent);margin-bottom:2px}
+h1{margin:0;font-size:23px;line-height:1.15;letter-spacing:-.025em}.sub{color:var(--muted);margin-top:4px;font-size:13px}
+.actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.status{display:flex;gap:8px;align-items:center;min-height:38px;padding:8px 11px;border:1px solid var(--line);border-radius:10px;background:var(--card-2);color:var(--muted)}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--muted-2);box-shadow:0 0 0 3px color-mix(in srgb,var(--muted-2) 12%,transparent)}.dot.ok{background:var(--ok);box-shadow:0 0 0 3px color-mix(in srgb,var(--ok) 13%,transparent)}.dot.wait{background:var(--warn);box-shadow:0 0 0 3px color-mix(in srgb,var(--warn) 13%,transparent)}.dot.err{background:var(--err);box-shadow:0 0 0 3px color-mix(in srgb,var(--err) 13%,transparent)}
+.primary-button,.icon-button,.chip,.text-button,.sort-btn{border:1px solid var(--line-strong);background:var(--card);color:var(--ink);cursor:pointer}.primary-button,.icon-button{min-height:38px;border-radius:9px;padding:8px 12px}.primary-button{background:var(--ink);color:var(--card);border-color:var(--ink);font-weight:750}.primary-button:disabled{opacity:.6;cursor:wait}.icon-button:hover,.chip:hover{background:var(--card-2)}.pause-button{display:inline-flex;align-items:center;justify-content:center;gap:7px}.control-icon{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:5px;background:var(--card-2);border:1px solid var(--line);font-size:12px;line-height:1}.control-label{font-weight:700}.pause-button[aria-pressed="true"]{background:color-mix(in srgb,var(--warn) 12%,var(--card));border-color:color-mix(in srgb,var(--warn) 42%,var(--line));color:var(--warn);font-weight:800}.pause-button[aria-pressed="true"] .control-icon{background:color-mix(in srgb,var(--warn) 16%,var(--card));border-color:color-mix(in srgb,var(--warn) 35%,var(--line));color:var(--warn)}
+button:focus-visible,a:focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 45%,transparent);outline-offset:2px}
+.meta-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:9px;margin-top:11px}.meta{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;box-shadow:var(--shadow);min-height:67px}.meta .k{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;font-weight:750}.meta .v{font-size:20px;font-weight:800;margin-top:2px;font-variant-numeric:tabular-nums}.meta .v.compact{font-size:16px;margin-top:6px}.meta-top{display:flex;justify-content:space-between;gap:10px;align-items:baseline}.progress-track{height:7px;margin-top:9px;background:var(--line);border-radius:999px;overflow:hidden}.progress-bar{display:block;height:100%;width:0;background:var(--accent);border-radius:999px;transition:width .35s ease}
+main{max-width:1380px;margin:auto;padding:16px 22px 40px}.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:0 0 16px;overflow:hidden;box-shadow:var(--shadow)}
+.section-head{padding:13px 15px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:14px;align-items:center}.section-head h2{font-size:16px;margin:0;letter-spacing:-.01em}.section-note{font-size:12px;color:var(--muted);margin:3px 0 0}.data-badge{flex:0 0 auto;padding:4px 8px;border-radius:999px;background:var(--card-2);border:1px solid var(--line);font-size:11px;color:var(--muted);font-weight:700}
+.legend{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:-1px}.legend.lula{background:var(--lula-bg);border:1px solid var(--lula-line)}.legend.flavio{background:var(--flavio-bg);border:1px solid var(--flavio-line)}.legend.outside{background:var(--outside-bg);border:1px solid var(--outside-line)}
+.filters{display:flex;gap:12px;justify-content:space-between;align-items:center;flex-wrap:wrap;padding:9px 14px;border-bottom:1px solid var(--line);background:var(--card-2)}.filter-group{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.filter-label{font-size:11px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.055em;margin-right:2px}.chip{min-height:30px;padding:4px 9px;border-radius:999px;font-size:12px}.chip[aria-pressed="true"]{background:var(--accent-2);border-color:var(--accent-3);color:var(--accent);font-weight:800}.text-button{border-color:transparent;background:transparent;color:var(--accent);padding:5px 7px;border-radius:6px;font-size:12px}.text-button:hover{text-decoration:underline}
+.tablebox{overflow:auto;max-height:620px}table{width:100%;border-collapse:separate;border-spacing:0;white-space:nowrap}th,td{padding:9px 11px;border-bottom:1px solid var(--line);text-align:left;background:var(--card)}th{position:sticky;top:0;background:var(--card-2);color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.045em;z-index:3}td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}tbody tr:last-child td{border-bottom:0}tbody tr:hover td{filter:brightness(.985)}
+.sort-btn{padding:0;border:0;background:transparent;color:inherit;text-transform:inherit;letter-spacing:inherit;font-size:inherit;font-weight:800;display:inline-flex;gap:4px;align-items:center}.num .sort-btn{margin-left:auto}.sort-indicator{width:10px;display:inline-block}.state-table th:first-child,.state-table td:first-child{position:sticky;left:0;z-index:2}.state-table th:first-child{z-index:5}.state-table td:first-child{font-weight:850}.state-table .lead-lula{background:var(--lula-bg)!important;color:var(--lula-ink);font-weight:800}.state-table .lead-flavio{background:var(--flavio-bg)!important;color:var(--flavio-ink);font-weight:800}.leader-name{display:inline-flex;align-items:center;gap:5px}.leader-arrow{font-size:10px}
+.party{display:inline-block;min-width:46px;text-align:center;padding:2px 7px;border-radius:999px;background:var(--accent-2);color:var(--accent);font-weight:800;font-size:11px}.elected-badge,.math-badge,.runoff-badge,.math-official-badge{display:inline-flex;align-items:center;gap:3px;margin-left:7px;padding:2px 6px;border-radius:999px;font-size:10px;font-weight:900;vertical-align:1px}.elected-badge{background:color-mix(in srgb,var(--ok) 12%,var(--card));border:1px solid color-mix(in srgb,var(--ok) 34%,var(--line));color:var(--ok)}.math-badge{background:color-mix(in srgb,var(--accent) 10%,var(--card));border:1px solid color-mix(in srgb,var(--accent) 30%,var(--line));color:var(--accent)}.runoff-badge{background:color-mix(in srgb,var(--accent) 10%,var(--card));border:1px solid color-mix(in srgb,var(--accent) 30%,var(--line));color:var(--accent)}.math-official-badge{background:color-mix(in srgb,var(--ok) 12%,var(--card));border:1px solid color-mix(in srgb,var(--ok) 34%,var(--line));color:var(--ok)}.elected-badge.demo,.math-badge.demo,.runoff-badge.demo,.math-official-badge.demo{margin-left:4px}.governor-status{display:inline-flex;align-items:center;justify-content:center;min-width:92px;padding:3px 7px;border-radius:999px;border:1px solid var(--line);background:var(--card-2);color:var(--muted);font-size:10px;font-weight:900}.governor-status.runoff{background:color-mix(in srgb,var(--accent) 12%,var(--card));border-color:color-mix(in srgb,var(--accent) 35%,var(--line));color:var(--accent)}.governor-status.decided{background:color-mix(in srgb,var(--ok) 12%,var(--card));border-color:color-mix(in srgb,var(--ok) 35%,var(--line));color:var(--ok)}.rank-badge{display:inline-grid;place-items:center;min-width:25px;height:22px;margin-right:7px;border-radius:6px;background:var(--card-2);border:1px solid var(--line);font-size:10px;font-weight:900;color:var(--muted)}.rank-badge.outside-rank{background:var(--outside-bg);border-color:var(--outside-line);color:var(--outside-ink)}.senate-table td.outside-seat,.governor-table td.outside-seat{background:var(--outside-bg)!important;color:var(--outside-ink);font-weight:750}.senate-table td.outside-seat .party,.governor-table td.outside-seat .party{background:color-mix(in srgb,var(--outside-ink) 10%,var(--outside-bg));color:var(--outside-ink)}.gap-to-seat{font-weight:850}
+.pct-wrap{position:relative;min-width:120px;height:28px;display:flex;align-items:center;justify-content:flex-end;isolation:isolate}.pct-bar{position:absolute;inset:3px 0 3px auto;width:var(--w);background:var(--accent-2);border-radius:5px;z-index:-1;transition:width .35s ease}.pct-value{font-weight:850;padding-right:4px}
+.msg{padding:18px 15px;color:var(--muted);text-align:center}.errors{margin:9px 0 0;padding:9px 11px;border:1px solid color-mix(in srgb,var(--err) 28%,var(--line));background:color-mix(in srgb,var(--err) 7%,var(--card));border-radius:9px;color:var(--err);display:none;font-size:12px}
+.cell-flash{animation:cellFlash 1.15s ease-out}@keyframes cellFlash{0%{box-shadow:inset 0 0 0 999px var(--flash)}100%{box-shadow:inset 0 0 0 999px transparent}}
+footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:11px;margin-top:14px;padding:0 2px}
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}.cell-flash{animation:none}.progress-bar,.pct-bar{transition:none}}
+@media(max-width:900px){.meta-grid{grid-template-columns:repeat(2,minmax(140px,1fr))}.actions{width:100%}.status{margin-left:auto}}
+@media(max-width:760px){
+  .wrap,main{padding-left:11px;padding-right:11px}.site-header{position:relative}.top{align-items:flex-start}.actions{gap:6px}.status{width:100%;margin-left:0;justify-content:center}.primary-button,.icon-button{flex:1}.meta-grid{grid-template-columns:1fr 1fr}.meta{min-height:64px}.meta .v{font-size:18px}.meta .v.compact{font-size:14px}
+  .section-head{align-items:flex-start}.state-head{flex-direction:column}.filters{align-items:flex-start}.filter-group{width:100%}.filter-label{width:100%}
+  .state-table{min-width:820px}.states-box{max-height:70vh}
+  .senate-box,.governor-box{max-height:none;overflow:visible}.senate-table,.governor-table{white-space:normal}.senate-table thead,.governor-table thead{display:none}.senate-table,.senate-table tbody,.senate-table tr,.senate-table td,.governor-table,.governor-table tbody,.governor-table tr,.governor-table td{display:block;width:100%}.senate-table tr,.governor-table tr{padding:10px 12px;border-bottom:1px solid var(--line);display:grid;grid-template-columns:1fr auto;gap:6px 14px;background:var(--card)}.senate-table td,.governor-table td{border:0;padding:2px 0;background:transparent!important;position:static!important}.senate-table td.outside-seat,.governor-table td.outside-seat{background:var(--outside-bg)!important;color:var(--outside-ink);padding:5px 7px;border-radius:6px}.senate-table td::before,.governor-table td::before{content:attr(data-label);display:block;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:750}.senate-table td:first-child,.governor-table td:first-child{grid-column:1/-1;font-size:16px;padding-bottom:4px}.senate-table td:first-child::before,.governor-table td:first-child::before{display:none}.senate-table td.num,.governor-table td.num{text-align:left}.senate-table .mobile-rank,.governor-table .mobile-rank{font-weight:800}
+  footer{flex-direction:column}
+}
+@media(max-width:480px){.meta-grid{grid-template-columns:1fr}.meta{min-height:0}.brand{min-width:0}.eyebrow{font-size:10px}h1{font-size:21px}.sub{font-size:12px}.data-badge{display:none}.pause-button .control-label{display:inline}}
+
+.privacy-note{margin-top:5px;font-size:11px;color:var(--muted-2)}.privacy-note a{color:inherit;text-decoration:underline;text-underline-offset:2px}.privacy-note a:hover{color:var(--accent)}
+.privacy-page{max-width:760px;margin:32px auto;padding:0 22px 48px}.privacy-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px;box-shadow:var(--shadow)}.privacy-card h1{font-size:22px;margin:0 0 14px}.privacy-card h2{font-size:15px;margin:22px 0 7px}.privacy-card p{color:var(--muted);margin:8px 0}.privacy-back{display:inline-block;margin-bottom:14px;font-size:13px}
+
+
+/* Mobile Phase 1 — structural layout */
+.mobile-nav{display:none}
+.panel{scroll-margin-top:12px}
+
+@media(max-width:760px){
+  .header-wrap{padding-top:9px;padding-bottom:9px}
+  .top{gap:9px}
+  .brand{width:100%;min-width:0}
+  .sub{font-size:11px;margin-top:3px}
+  .actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;width:100%}
+  .actions .primary-button,.actions .icon-button{width:100%;min-width:0;padding-left:8px;padding-right:8px}
+  .actions .status{grid-column:1/-1;width:100%;min-height:34px;padding:6px 9px;justify-content:center}
+  .meta-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-top:8px}
+  .progress-card{grid-column:1/-1}
+  .meta{min-height:56px;padding:8px 10px}
+  .meta .v{font-size:17px}
+  .meta .v.compact{font-size:13px;margin-top:4px}
+
+  .mobile-nav{display:flex;gap:6px;overflow-x:auto;overscroll-behavior-inline:contain;scrollbar-width:none;margin:0 0 10px;padding:1px 0 3px}
+  .mobile-nav::-webkit-scrollbar{display:none}
+  .mobile-nav a{flex:0 0 auto;text-decoration:none;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:7px 10px;font-size:12px;font-weight:750;white-space:nowrap}
+  .mobile-nav a:active{background:var(--accent-2);color:var(--accent)}
+
+  /* Lula x Flávio: replace horizontal table with compact UF cards. */
+  .states-box{max-height:none;overflow:visible}
+  .state-table{min-width:0;white-space:normal}
+  .state-table thead{display:none}
+  .state-table,.state-table tbody,.state-table tr,.state-table td{display:block;width:100%}
+  .state-table tr{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    grid-template-areas:
+      "uf progress"
+      "lula flavio"
+      "diff diff"
+      "votes votes";
+    gap:6px 8px;
+    margin:0;
+    padding:10px 11px;
+    border-bottom:1px solid var(--line);
+    background:var(--card)
+  }
+  .state-table tr:last-child{border-bottom:0}
+  .state-table td{position:static!important;left:auto!important;border:0;padding:7px 9px;background:var(--card);min-width:0}
+  .state-table td::before{content:attr(data-label);display:block;margin-bottom:2px;font-size:9px;line-height:1.15;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:800}
+  .state-table td:nth-child(1){grid-area:uf;padding:2px 0;background:transparent!important;font-size:17px;align-self:center}
+  .state-table td:nth-child(1)::before{display:none}
+  .state-table td:nth-child(2){grid-area:lula;border:1px solid var(--line);border-radius:8px;text-align:left}
+  .state-table td:nth-child(3){grid-area:flavio;border:1px solid var(--line);border-radius:8px;text-align:left}
+  .state-table td:nth-child(4){grid-area:diff;border-radius:8px;text-align:left}
+  .state-table td:nth-child(5){grid-area:votes;border-radius:8px;text-align:left}
+  .state-table td:nth-child(6){grid-area:progress;padding:2px 0;background:transparent!important;text-align:right;align-self:center;font-weight:850}
+  .state-table td:nth-child(6)::before{margin-bottom:0}
+  .state-table .leader-name{white-space:normal}
+
+  /* Governor cards: UF/status header, then one row per ranked candidate. */
+  .governor-table tr{
+    grid-template-columns:minmax(0,1fr) auto auto;
+    gap:0 8px;
+    padding:10px 11px
+  }
+  .governor-table td{min-width:0;padding:7px 0}
+  .governor-table td::before{display:none}
+  .governor-table td:nth-child(1){grid-column:1/2;grid-row:1;font-size:17px;align-self:center}
+  .governor-table td:nth-child(2){grid-column:2/4;grid-row:1;text-align:right;align-self:center}
+  .governor-table td:nth-child(3),.governor-table td:nth-child(4),.governor-table td:nth-child(5){grid-row:2;border-top:1px solid var(--line);margin-top:7px}
+  .governor-table td:nth-child(3){grid-column:1}.governor-table td:nth-child(4){grid-column:2}.governor-table td:nth-child(5){grid-column:3;text-align:right}
+  .governor-table td:nth-child(6),.governor-table td:nth-child(7),.governor-table td:nth-child(8){grid-row:3;border-top:1px solid var(--line)}
+  .governor-table td:nth-child(6){grid-column:1}.governor-table td:nth-child(7){grid-column:2}.governor-table td:nth-child(8){grid-column:3;text-align:right}
+  .governor-table td:nth-child(9),.governor-table td:nth-child(10),.governor-table td:nth-child(11){grid-row:4;margin-top:2px;background:var(--outside-bg)!important;border-radius:0}
+  .governor-table td:nth-child(9){grid-column:1;border-radius:7px 0 0 7px;padding-left:7px}.governor-table td:nth-child(10){grid-column:2}.governor-table td:nth-child(11){grid-column:3;border-radius:0 7px 7px 0;padding-right:7px;text-align:right}
+  .governor-table td:nth-child(12){grid-column:1/2;grid-row:5;margin-top:6px}
+  .governor-table td:nth-child(13){grid-column:2/4;grid-row:5;margin-top:6px;text-align:right}
+  .governor-table td:nth-child(12)::before,.governor-table td:nth-child(13)::before{display:block}
+  .governor-table .mobile-rank{white-space:normal}
+
+  /* Senate cards: one compact row for each of the three candidates. */
+  .senate-table tr{
+    grid-template-columns:minmax(0,1fr) auto auto;
+    gap:0 8px;
+    padding:10px 11px
+  }
+  .senate-table td{min-width:0;padding:7px 0}
+  .senate-table td::before{display:none}
+  .senate-table td:nth-child(1){grid-column:1/4;grid-row:1;font-size:17px}
+  .senate-table td:nth-child(2),.senate-table td:nth-child(3),.senate-table td:nth-child(4){grid-row:2;border-top:1px solid var(--line);margin-top:7px}
+  .senate-table td:nth-child(2){grid-column:1}.senate-table td:nth-child(3){grid-column:2}.senate-table td:nth-child(4){grid-column:3;text-align:right}
+  .senate-table td:nth-child(5),.senate-table td:nth-child(6),.senate-table td:nth-child(7){grid-row:3;border-top:1px solid var(--line)}
+  .senate-table td:nth-child(5){grid-column:1}.senate-table td:nth-child(6){grid-column:2}.senate-table td:nth-child(7){grid-column:3;text-align:right}
+  .senate-table td:nth-child(8),.senate-table td:nth-child(9),.senate-table td:nth-child(10){grid-row:4;margin-top:2px;background:var(--outside-bg)!important;border-radius:0}
+  .senate-table td:nth-child(8){grid-column:1;border-radius:7px 0 0 7px;padding-left:7px}.senate-table td:nth-child(9){grid-column:2}.senate-table td:nth-child(10){grid-column:3;border-radius:0 7px 7px 0;padding-right:7px;text-align:right}
+  .senate-table td:nth-child(11){grid-column:1/2;grid-row:5;margin-top:6px}
+  .senate-table td:nth-child(12){grid-column:2/4;grid-row:5;margin-top:6px;text-align:right}
+  .senate-table td:nth-child(11)::before,.senate-table td:nth-child(12)::before{display:block}
+  .senate-table .mobile-rank{white-space:normal}
+
+  .governor-table .party,.senate-table .party{min-width:40px;padding-left:6px;padding-right:6px}
+  .governor-table .elected-badge,.governor-table .math-official-badge,.governor-table .runoff-badge,
+  .senate-table .elected-badge,.senate-table .math-badge{margin-left:5px;white-space:nowrap}
+}
+
+@media(max-width:480px){
+  .site-header .sub{display:none}
+  .header-wrap{padding-top:7px;padding-bottom:7px}
+  .eyebrow{margin-bottom:1px}
+  h1{font-size:20px}
+  .actions{margin-top:1px}
+  .actions .primary-button,.actions .icon-button{min-height:36px;font-size:12px}
+  .actions .status{font-size:11px}
+  .meta-grid{grid-template-columns:1fr 1fr}
+  .meta-grid .meta:nth-child(2){display:none}
+  .meta-grid .progress-card{grid-column:1/-1}
+  .meta{min-height:0}
+  .meta .k{font-size:9px}
+  .meta .v.compact{font-size:12px}
+  main{padding-top:10px}
+  .section-head{padding:11px 12px}
+  .section-head h2{font-size:15px}
+  .section-note{font-size:11px}
+  .panel{margin-bottom:12px}
+  .state-table tr,.governor-table tr,.senate-table tr{padding-left:9px;padding-right:9px}
+  .governor-status{min-width:0;max-width:150px;white-space:normal;line-height:1.2}
+  .elected-badge,.math-badge,.runoff-badge,.math-official-badge{font-size:9px}
+}
+
+
+/* Result-state backgrounds */
+.governor-table td.candidate-elected,.senate-table td.candidate-elected{
+  background:color-mix(in srgb,var(--ok) 14%,var(--card))!important;
+}
+.governor-table td.candidate-runoff{
+  background:color-mix(in srgb,#d9a514 18%,var(--card))!important;
+}
+html[data-theme="dark"] .governor-table td.candidate-runoff{
+  background:color-mix(in srgb,#d9a514 22%,var(--card))!important;
+}
+
+@media(max-width:760px){
+  .state-table tr{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .state-table td:nth-child(2),.state-table td:nth-child(3){
+    background:var(--card)!important;
+  }
+  .state-share-bar{
+    position:relative;
+    overflow:hidden;
+    isolation:isolate;
+    min-height:28px;
+    display:flex;
+    align-items:center;
+    padding:4px 7px;
+    border-radius:6px;
+    font-weight:850;
+  }
+  .state-share-bar::before{
+    content:"";
+    position:absolute;
+    inset:0 auto 0 0;
+    width:var(--share);
+    z-index:-1;
+    border-radius:5px;
+    transition:width .35s ease;
+  }
+  .state-share-bar.lula-share::before{background:var(--lula-bg)}
+  .state-share-bar.flavio-share::before{background:var(--flavio-bg)}
+  .state-share-bar.lula-share{color:var(--lula-ink)}
+  .state-share-bar.flavio-share{color:var(--flavio-ink)}
+
+  .governor-table td.candidate-elected,.senate-table td.candidate-elected{
+    background:color-mix(in srgb,var(--ok) 15%,var(--card))!important;
+  }
+  .governor-table td.candidate-runoff{
+    background:color-mix(in srgb,#d9a514 20%,var(--card))!important;
+  }
+
+  .governor-table td:nth-child(3).candidate-elected,.governor-table td:nth-child(3).candidate-runoff,
+  .governor-table td:nth-child(6).candidate-elected,.governor-table td:nth-child(6).candidate-runoff,
+  .senate-table td:nth-child(2).candidate-elected,.senate-table td:nth-child(5).candidate-elected{
+    border-radius:7px 0 0 7px;
+    padding-left:7px;
+  }
+  .governor-table td:nth-child(5).candidate-elected,.governor-table td:nth-child(5).candidate-runoff,
+  .governor-table td:nth-child(8).candidate-elected,.governor-table td:nth-child(8).candidate-runoff,
+  .senate-table td:nth-child(4).candidate-elected,.senate-table td:nth-child(7).candidate-elected{
+    border-radius:0 7px 7px 0;
+    padding-right:7px;
+  }
+}
+
+
+/* State filters for Governor and Senate */
+.section-filter{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:9px 14px;
+  border-bottom:1px solid var(--line);
+  background:var(--card-2);
+}
+.section-filter label{
+  font-size:11px;
+  color:var(--muted);
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.055em;
+}
+.section-filter select{
+  min-height:32px;
+  min-width:170px;
+  padding:5px 30px 5px 9px;
+  border:1px solid var(--line-strong);
+  border-radius:8px;
+  background:var(--card);
+  color:var(--ink);
+  font:inherit;
+}
+.section-filter select:focus-visible{
+  outline:3px solid color-mix(in srgb,var(--accent) 45%,transparent);
+  outline-offset:2px;
+}
+
+@media(max-width:760px){
+  .section-filter{
+    position:sticky;
+    top:0;
+    z-index:4;
+    padding:8px 11px;
+  }
+  .section-filter select{
+    flex:1;
+    min-width:0;
+    min-height:38px;
+  }
+  .section-filter .text-button{
+    min-height:38px;
+  }
+}
+
+
+/* Mobile tab navigation */
+.mobile-tab-panel[hidden]{display:none!important}
+
+@media(max-width:760px){
+  .mobile-nav{
+    position:sticky;
+    top:0;
+    z-index:15;
+    margin:0 -11px 10px;
+    padding:8px 11px;
+    background:color-mix(in srgb,var(--bg) 96%,transparent);
+    border-bottom:1px solid var(--line);
+    backdrop-filter:blur(10px);
+  }
+  .mobile-nav .mobile-tab{
+    min-height:36px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .mobile-nav .mobile-tab[aria-selected="true"]{
+    background:var(--accent);
+    border-color:var(--accent);
+    color:var(--card);
+  }
+  .mobile-tab-panel{
+    margin-bottom:12px;
+  }
+  .section-filter{
+    top:53px;
+  }
+}
+
+@media(min-width:761px){
+  .mobile-tab-panel[hidden]{display:block!important}
+}
+
+
+/* Mobile Phase 2 — interaction */
+.mobile-sort-controls{display:none}
+
+@media(max-width:760px){
+  .actions .primary-button,.actions .icon-button{
+    min-height:44px;
+  }
+  .mobile-nav .mobile-tab{
+    min-height:44px;
+    padding-left:12px;
+    padding-right:12px;
+  }
+
+  .filters{
+    gap:8px;
+    padding:8px 11px;
+  }
+  .region-filter-group{
+    width:100%;
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    overscroll-behavior-inline:contain;
+    scrollbar-width:none;
+    padding-bottom:2px;
+  }
+  .region-filter-group::-webkit-scrollbar{display:none}
+  .region-filter-group .filter-label{
+    width:auto;
+    flex:0 0 auto;
+  }
+  .region-filter-group .chip{
+    flex:0 0 auto;
+  }
+  .highlight-filter-group{
+    gap:7px;
+  }
+  .highlight-filter-group .filter-label{
+    width:100%;
+  }
+  .filters .chip,.filters .text-button{
+    min-height:44px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .mobile-sort-controls{
+    display:grid;
+    grid-template-columns:auto minmax(0,1fr) 44px;
+    gap:8px;
+    align-items:center;
+    padding:8px 11px;
+    border-bottom:1px solid var(--line);
+    background:var(--card-2);
+  }
+  .mobile-sort-controls label{
+    font-size:10px;
+    color:var(--muted);
+    font-weight:800;
+    text-transform:uppercase;
+    letter-spacing:.055em;
+  }
+  .mobile-sort-controls select{
+    width:100%;
+    min-width:0;
+    min-height:44px;
+    padding:7px 30px 7px 9px;
+    border:1px solid var(--line-strong);
+    border-radius:8px;
+    background:var(--card);
+    color:var(--ink);
+    font:inherit;
+  }
+  .sort-direction-button{
+    width:44px;
+    height:44px;
+    border:1px solid var(--line-strong);
+    border-radius:8px;
+    background:var(--card);
+    color:var(--ink);
+    font-size:18px;
+    font-weight:900;
+    cursor:pointer;
+  }
+  .mobile-sort-controls select:focus-visible,.sort-direction-button:focus-visible{
+    outline:3px solid color-mix(in srgb,var(--accent) 45%,transparent);
+    outline-offset:2px;
+  }
+
+  .section-filter select,.section-filter .text-button{
+    min-height:44px;
+  }
+}
+
+@media(max-width:480px){
+  .actions .primary-button,.actions .icon-button{
+    min-height:44px;
+  }
+  .mobile-sort-controls{
+    grid-template-columns:1fr 44px;
+  }
+  .mobile-sort-controls label{
+    grid-column:1/-1;
+  }
+}
+
+
+/* Mobile Phase 3 — polish and overflow hardening */
+:root{
+  --result-elected-bg:#edf8f1;
+  --result-elected-ink:#145a3a;
+  --result-runoff-bg:#fff7d6;
+  --result-runoff-ink:#755500;
+  --result-runoff-line:#e8cf74;
+}
+html[data-theme="dark"]{
+  --result-elected-bg:#173729;
+  --result-elected-ink:#a9e8bf;
+  --result-runoff-bg:#403617;
+  --result-runoff-ink:#f2d77b;
+  --result-runoff-line:#74642a;
+}
+
+body{overflow-x:hidden}
+main,.panel,.section-head>*,.filters,.filter-group,.actions>*{min-width:0}
+select{max-width:100%}
+
+/* Make result colors consistent in light/dark themes. */
+.governor-table td.candidate-elected,.senate-table td.candidate-elected{
+  background:var(--result-elected-bg)!important;
+  color:var(--result-elected-ink);
+}
+.governor-table td.candidate-runoff{
+  background:var(--result-runoff-bg)!important;
+  color:var(--result-runoff-ink);
+}
+.runoff-badge,.governor-status.runoff{
+  background:var(--result-runoff-bg);
+  border-color:var(--result-runoff-line);
+  color:var(--result-runoff-ink);
+}
+.elected-badge,.governor-status.decided{
+  background:var(--result-elected-bg);
+  color:var(--result-elected-ink);
+}
+
+/* Long names and multiple badges must wrap instead of widening the page. */
+.mobile-rank,.section-note,.status,.meta .v,.candidate-name{
+  overflow-wrap:anywhere;
+  word-break:normal;
+}
+.elected-badge,.math-badge,.runoff-badge,.math-official-badge,.governor-status{
+  max-width:100%;
+  white-space:normal;
+  text-align:center;
+  line-height:1.2;
+}
+
+@media(max-width:760px){
+  body{font-size:13.5px}
+  main{width:100%;max-width:100%;overflow-x:clip}
+  .panel{width:100%;max-width:100%}
+  .section-head{gap:8px;padding:11px 12px}
+  .section-head h2{font-size:15px;line-height:1.25}
+  .section-note{font-size:11px;line-height:1.4;margin-top:4px}
+
+  .mobile-nav{
+    max-width:calc(100vw - 0px);
+  }
+
+  .state-table,.governor-table,.senate-table{
+    max-width:100%;
+  }
+  .state-table td,.governor-table td,.senate-table td{
+    min-width:0;
+    max-width:100%;
+  }
+
+  .state-share-bar{min-width:0}
+  .state-share-bar span{white-space:nowrap}
+  .leader-name{max-width:100%;overflow-wrap:anywhere}
+
+  .governor-table tr,.senate-table tr{
+    grid-template-columns:minmax(0,1fr) minmax(42px,auto) minmax(50px,auto);
+    column-gap:6px;
+  }
+  .governor-table td:nth-child(3),.governor-table td:nth-child(6),
+  .senate-table td:nth-child(2),.senate-table td:nth-child(5){
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:5px;
+  }
+  .governor-table td:nth-child(3) .rank-badge,.governor-table td:nth-child(6) .rank-badge,
+  .senate-table td:nth-child(2) .rank-badge,.senate-table td:nth-child(5) .rank-badge{
+    flex:0 0 auto;
+    margin-right:0;
+  }
+  .governor-table td:nth-child(3) .mobile-rank,.governor-table td:nth-child(6) .mobile-rank,
+  .senate-table td:nth-child(2) .mobile-rank,.senate-table td:nth-child(5) .mobile-rank{
+    flex:1 1 120px;
+    min-width:0;
+  }
+  .governor-table td:nth-child(3) .elected-badge,.governor-table td:nth-child(3) .runoff-badge,
+  .governor-table td:nth-child(6) .elected-badge,.governor-table td:nth-child(6) .runoff-badge,
+  .senate-table td:nth-child(2) .elected-badge,.senate-table td:nth-child(2) .math-badge,
+  .senate-table td:nth-child(5) .elected-badge,.senate-table td:nth-child(5) .math-badge{
+    flex:0 1 auto;
+    margin-left:0;
+  }
+
+  .governor-table .party,.senate-table .party{
+    max-width:100%;
+    min-width:0;
+    white-space:normal;
+    overflow-wrap:anywhere;
+  }
+  .governor-table td.num,.senate-table td.num{white-space:nowrap}
+
+  /* Re-apply themed result backgrounds after legacy mobile transparent rules. */
+  .governor-table td.candidate-elected,.senate-table td.candidate-elected{
+    background:var(--result-elected-bg)!important;
+  }
+  .governor-table td.candidate-runoff{
+    background:var(--result-runoff-bg)!important;
+  }
+
+  .section-filter,.mobile-sort-controls,.filters{
+    max-width:100%;
+  }
+}
+
+@media(max-width:480px){
+  .wrap,main{padding-left:8px;padding-right:8px}
+  .header-wrap{padding-top:7px;padding-bottom:8px}
+  .actions{gap:5px}
+  .actions .primary-button,.actions .icon-button{
+    padding-left:6px;padding-right:6px;font-size:11.5px;
+  }
+  .actions .status{
+    font-size:10.5px;
+    line-height:1.3;
+    padding-left:7px;
+    padding-right:7px;
+  }
+
+  .mobile-nav{
+    margin-left:-8px;
+    margin-right:-8px;
+    padding-left:8px;
+    padding-right:8px;
+    gap:5px;
+  }
+  .mobile-nav .mobile-tab{
+    font-size:11.5px;
+    padding-left:10px;
+    padding-right:10px;
+  }
+
+  .section-head{padding:10px}
+  .filters,.mobile-sort-controls,.section-filter{padding-left:9px;padding-right:9px}
+
+  .state-table tr,.governor-table tr,.senate-table tr{
+    padding:9px 8px;
+  }
+  .state-table td{padding:6px 7px}
+  .state-table td:nth-child(1){font-size:16px}
+  .state-table td:nth-child(6){font-size:12px}
+  .state-share-bar{min-height:27px;padding:3px 6px}
+
+  .governor-table tr,.senate-table tr{
+    grid-template-columns:minmax(0,1fr) minmax(38px,auto) minmax(46px,auto);
+    column-gap:5px;
+  }
+  .governor-table .mobile-rank,.senate-table .mobile-rank{
+    font-size:12.5px;
+    line-height:1.25;
+  }
+  .rank-badge{
+    min-width:23px;
+    height:21px;
+    font-size:9px;
+  }
+  .party{font-size:9.5px;padding:2px 5px}
+  .elected-badge,.math-badge,.runoff-badge,.math-official-badge{
+    font-size:8.5px;
+    padding:2px 5px;
+  }
+
+  /* President becomes a compact card list on narrow phones. */
+  .president-table{
+    white-space:normal;
+  }
+  .president-table thead{display:none}
+  .president-table,.president-table tbody,.president-table tr,.president-table td{
+    display:block;
+    width:100%;
+  }
+  .president-table tr{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    grid-template-areas:
+      "candidate pct"
+      "party votes";
+    gap:5px 8px;
+    padding:9px 10px;
+    border-bottom:1px solid var(--line);
+    background:var(--card);
+  }
+  .president-table tr:last-child{border-bottom:0}
+  .president-table td{
+    border:0;
+    padding:2px 0;
+    min-width:0;
+    background:transparent;
+  }
+  .president-table td::before{
+    content:attr(data-label);
+    display:block;
+    margin-bottom:1px;
+    font-size:8.5px;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    color:var(--muted);
+    font-weight:800;
+  }
+  .president-table td:nth-child(1){grid-area:candidate;overflow-wrap:anywhere}
+  .president-table td:nth-child(2){grid-area:party}
+  .president-table td:nth-child(3){grid-area:votes;text-align:right}
+  .president-table td:nth-child(4){grid-area:pct;text-align:right}
+  .president-table .pct-wrap{
+    min-width:90px;
+    height:26px;
+  }
+}
+
+@media(max-width:360px){
+  .meta-grid{gap:5px}
+  .meta{padding:7px 8px}
+  .meta .v{font-size:16px}
+  .meta .v.compact{font-size:11px}
+
+  .mobile-nav .mobile-tab{
+    font-size:11px;
+    padding-left:9px;
+    padding-right:9px;
+  }
+
+  .highlight-filter-group .chip{
+    font-size:11px;
+    padding-left:8px;
+    padding-right:8px;
+  }
+  .highlight-filter-group .text-button{
+    padding-left:5px;
+    padding-right:5px;
+  }
+
+  .governor-table tr,.senate-table tr{
+    grid-template-columns:minmax(0,1fr) 38px 46px;
+  }
+  .governor-status{font-size:8.5px}
+}
+
+
+/* Mobile Phase 4 — performance and accessibility */
+button,a,select{touch-action:manipulation}
+select:focus-visible{
+  outline:3px solid color-mix(in srgb,var(--accent) 45%,transparent);
+  outline-offset:2px;
+}
+main[aria-busy="true"] .mobile-tab-panel{
+  cursor:progress;
+}
+
+/* Stronger state boundaries help when color perception or contrast settings differ. */
+.governor-table td.candidate-elected,.senate-table td.candidate-elected{
+  border-top-color:color-mix(in srgb,var(--ok) 45%,var(--line));
+}
+.governor-table td.candidate-runoff{
+  border-top-color:var(--result-runoff-line);
+}
+
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto!important}
+  .state-share-bar::before,.progress-bar,.pct-bar{
+    transition:none!important;
+  }
+  .cell-flash{animation:none!important}
+}
+
+@media(forced-colors:active){
+  .mobile-tab[aria-selected="true"],
+  .chip[aria-pressed="true"],
+  .governor-status,
+  .elected-badge,.math-badge,.runoff-badge,.math-official-badge{
+    border:2px solid CanvasText;
+  }
+  .candidate-elected,.candidate-runoff,.outside-seat{
+    outline:1px solid CanvasText;
+    outline-offset:-1px;
+  }
+  .progress-bar,.state-share-bar::before{
+    forced-color-adjust:auto;
+  }
+}
+
+@media(prefers-contrast:more){
+  .panel,.meta,.status,.section-filter select,.mobile-sort-controls select,
+  .primary-button,.icon-button,.chip,.sort-direction-button{
+    border-width:2px;
+  }
+}
